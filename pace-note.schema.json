@@ -1,0 +1,129 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "title": "RallyPaceNote",
+    "type": "object",
+    "properties": {
+        "PK": {
+            "type": "string"
+        },
+        "SK": {
+            "type": "string"
+        },
+        "SetID": {
+            "type": [
+                "number"
+            ]
+        },
+        "IndexSequence": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "IndexOdo": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "IndexLandmark": {
+            "oneOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "Direction": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "Severity": {
+            "oneOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "Duration": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "enum": [
+                "very short",
+                "short",
+                "medium",
+                "long",
+                "very long",
+                "very very long",
+                null
+            ]
+        },
+        "Decorators": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "enum": [
+                    "keep",
+                    "in",
+                    "out",
+                    "left",
+                    "right",
+                    "mid",
+                    "cut",
+                    "don't",
+                    "slippy",
+                    "over",
+                    "crest",
+                    "jump",
+                    "maybe",
+                    "fast",
+                    "slow",
+                    "!",
+                    "!!",
+                    "!!!"
+                ]
+            },
+            "uniqueItems": true
+        },
+        "Joiner": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "Notes": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "RecceAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "required": [
+        "PK",
+        "SK",
+        "SetID",
+        "IndexSequence",
+        "RecceAt"
+    ]
+}
