@@ -1,0 +1,208 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "RallyStageGeometry",
+    "type": "object",
+    "definitions": {
+        "surfaceEnum": {
+            "type": "string",
+            "enum": [
+                "tarmac_smooth",
+                "tarmac_shiny",
+                "tarmac_dirty",
+                "tarmac_bumpy",
+                "gravel_loose",
+                "gravel_compact",
+                "gravel_marbles",
+                "gravel_dusty",
+                "sand_packed",
+                "sand_loose",
+                "snow_packed",
+                "snow_loose",
+                "ice_packed",
+                "ice_clear",
+                "ice_snow_covered",
+                "rock",
+                "grass_short",
+                "grass_long",
+                "water",
+                "bridge"
+            ]
+        },
+        "surfaceStrip": {
+            "type": "object",
+            "properties": {
+                "surface": {
+                    "$ref": "#/definitions/surfaceEnum"
+                },
+                "widthMeters": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "heightChangeMeters": {
+                    "type": "number"
+                },
+                "radiusDegrees": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "surface",
+                "widthMeters"
+            ]
+        },
+        "roadsideLinerEnum": {
+            "type": "string",
+            "enum": [
+                "guard_rail",
+                "trees",
+                "wall",
+                "fence"
+            ]
+        },
+        "roadsideLiner": {
+            "type": "object",
+            "properties": {
+                "feature": {
+                    "$ref": "#/definitions/roadsideLinerEnum"
+                },
+                "distanceFromRoadCenterMeters": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "widthMeters": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "heightMeters": {
+                    "type": "number",
+                    "minimum": 1
+                }
+            },
+            "required": [
+                "feature",
+                "distanceFromRoadCenterMeters",
+                "widthMeters",
+                "heightMeters"
+            ]
+        },
+        "roadsideFeatureEnum": {
+            "type": "string",
+            "enum": [
+                "boulder",
+                "tree",
+                "post",
+                "hole",
+                "tc_start_sign",
+                "tc_end_sign",
+                "tc_check_in_sign",
+                "start_sign",
+                "finish_sign",
+                "finish_warning_sign"
+            ]
+        },
+        "roadsideFeature": {
+            "type": "object",
+            "properties": {
+                "feature": {
+                    "$ref": "#/definitions/roadsideFeatureEnum"
+                },
+                "distanceFromRoadCenterMeters": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "distanceAlongRoadMeters": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "widthMeters": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "heightMeters": {
+                    "type": "number",
+                    "minimum": 1
+                }
+            },
+            "required": [
+                "feature",
+                "distanceFromRoadCenterMeters",
+                "widthMeters",
+                "heightMeters"
+            ]
+        }
+    },
+    "properties": {
+        "PK": {
+            "type": "string"
+        },
+        "SK": {
+            "type": "string"
+        },
+        "SetID": {
+            "type": "number"
+        },
+        "IndexSequence": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "CenterLineLengthMeters": {
+            "type": "number"
+        },
+        "HeightChangeMeters": {
+            "type": "number"
+        },
+        "HorizontalRadiusDegrees": {
+            "type": "integer"
+        },
+        "VerticalRadiusDegrees": {
+            "type": "integer"
+        },
+        "RoadSurface": {
+            "$ref": "#/definitions/surfaceStrip"
+        },
+        "leftSurfaces": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/surfaceStrip"
+            }
+        },
+        "rightSurfaces": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/surfaceStrip"
+            }
+        },
+        "leftFeatures": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/roadsideFeature"
+            }
+        },
+        "rightFeatures": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/roadsideFeature"
+            }
+        },
+        "leftLiners": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/roadsideLiner"
+            }
+        },
+        "rightLiners": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/roadsideLiner"
+            }
+        }
+    },
+    "required": [
+        "PK",
+        "SK",
+        "SetID",
+        "IndexSequence",
+        "CenterLineLengthMeters",
+        "RoadSurface"
+    ]
+}
