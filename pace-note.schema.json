@@ -1,5 +1,5 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft-07/schema#",
     "title": "RallyPaceNote",
     "type": "object",
     "properties": {
@@ -10,9 +10,7 @@
             "type": "string"
         },
         "SetID": {
-            "type": [
-                "number"
-            ]
+            "type": "number"
         },
         "IndexSequence": {
             "type": "integer",
@@ -74,27 +72,7 @@
                 "null"
             ],
             "items": {
-                "type": "string",
-                "enum": [
-                    "keep",
-                    "in",
-                    "out",
-                    "left",
-                    "right",
-                    "mid",
-                    "cut",
-                    "don't",
-                    "slippy",
-                    "over",
-                    "crest",
-                    "jump",
-                    "maybe",
-                    "fast",
-                    "slow",
-                    "!",
-                    "!!",
-                    "!!!"
-                ]
+                "type": "string"
             },
             "uniqueItems": true
         },
