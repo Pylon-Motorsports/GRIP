@@ -157,6 +157,9 @@
             ],
             "minimum": 1
         },
+        "HorizontalAngleDeltaDegrees": {
+            "type": "integer"
+        },
         "leftSurfaces": {
             "type": "array",
             "items": {
