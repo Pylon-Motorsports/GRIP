@@ -1,6 +1,9 @@
 # GRIP
 Generic Rally Information Protocol
 
+For the geometry schema, each entry includes the shape for the end of the segment. The first segment should always be length zero to initialize the shape.
+For surfaces like sand and snow, 0 depth indicated packed and the depth is loose on top.
+
 Sample pace-note.schema.json records:
 ```
 {

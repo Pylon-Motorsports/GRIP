@@ -14,16 +14,13 @@
                 "gravel_compact",
                 "gravel_marbles",
                 "gravel_dusty",
-                "sand_packed",
-                "sand_loose",
-                "snow_packed",
-                "snow_loose",
+                "sand",
+                "snow",
                 "ice_packed",
                 "ice_clear",
                 "ice_snow_covered",
                 "rock",
-                "grass_short",
-                "grass_long",
+                "grass",
                 "water",
                 "bridge"
             ]
@@ -34,20 +31,27 @@
                 "surface": {
                     "$ref": "#/definitions/surfaceEnum"
                 },
-                "widthMeters": {
-                    "type": "number",
+                "widthCentimeters": {
+                    "type": "integer",
                     "minimum": 1
                 },
-                "heightChangeMeters": {
-                    "type": "number"
+                "angleDeltaDegrees": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
-                "radiusDegrees": {
-                    "type": "integer"
+                "depthCentimeters": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 0
                 }
             },
             "required": [
                 "surface",
-                "widthMeters"
+                "widthCentimeters"
             ]
         },
         "roadsideLinerEnum": {
@@ -69,12 +73,12 @@
                     "type": "number",
                     "minimum": 0
                 },
-                "widthMeters": {
-                    "type": "number",
+                "widthCentimeters": {
+                    "type": "integer",
                     "minimum": 1
                 },
-                "heightMeters": {
-                    "type": "number",
+                "heightCentimeters": {
+                    "type": "integer",
                     "minimum": 1
                 }
             },
@@ -106,28 +110,28 @@
                 "feature": {
                     "$ref": "#/definitions/roadsideFeatureEnum"
                 },
-                "distanceFromRoadCenterMeters": {
-                    "type": "number",
+                "distanceFromRoadCenterCentimeters": {
+                    "type": "integer",
                     "minimum": 0
                 },
-                "distanceAlongRoadMeters": {
-                    "type": "number",
+                "distanceAlongRoadCentimeters": {
+                    "type": "integer",
                     "minimum": 0
                 },
-                "widthMeters": {
-                    "type": "number",
+                "widthCentimeters": {
+                    "type": "integer",
                     "minimum": 1
                 },
-                "heightMeters": {
-                    "type": "number",
+                "heightCentimeters": {
+                    "type": "integer",
                     "minimum": 1
                 }
             },
             "required": [
                 "feature",
-                "distanceFromRoadCenterMeters",
-                "widthMeters",
-                "heightMeters"
+                "distanceFromRoadCenterCentimeters",
+                "widthCentimeters",
+                "heightCentimeters"
             ]
         }
     },
@@ -139,26 +143,19 @@
             "type": "string"
         },
         "SetID": {
-            "type": "number"
+            "type": "integer",
+            "minimum": 0
         },
         "IndexSequence": {
             "type": "integer",
             "minimum": 0
         },
         "CenterLineLengthMeters": {
-            "type": "number"
-        },
-        "HeightChangeMeters": {
-            "type": "number"
-        },
-        "HorizontalRadiusDegrees": {
-            "type": "integer"
-        },
-        "VerticalRadiusDegrees": {
-            "type": "integer"
-        },
-        "RoadSurface": {
-            "$ref": "#/definitions/surfaceStrip"
+            "type": [
+                "integer",
+                "null"
+            ],
+            "minimum": 1
         },
         "leftSurfaces": {
             "type": "array",
@@ -202,7 +199,6 @@
         "SK",
         "SetID",
         "IndexSequence",
-        "CenterLineLengthMeters",
-        "RoadSurface"
+        "CenterLineLengthMeters"
     ]
 }
