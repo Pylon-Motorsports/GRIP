@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema#",
-    "title": "RallyStageGeometry",
+    "title": "GripStageGeometry",
+    "description": "Geometric description of a rally stage as an ordered list of segments. Each segment describes the road surface and shape for the END of that segment; the first segment should be length zero and is used to initialize the starting shape. Storage-agnostic: natural keys (rallyName + rallyDate + stageName) identify stages across parties.",
     "type": "object",
     "definitions": {
         "surfaceEnum": {
@@ -27,6 +28,7 @@
         },
         "surfaceStrip": {
             "type": "object",
+            "description": "One lateral strip of surface next to the road. Strips are listed from the road centre outwards.",
             "properties": {
                 "surface": {
                     "$ref": "#/definitions/surfaceEnum"
@@ -39,14 +41,16 @@
                     "type": [
                         "integer",
                         "null"
-                    ]
+                    ],
+                    "description": "Lateral slope relative to the adjacent inner strip (positive = rising away from road centre)."
                 },
                 "depthCentimeters": {
                     "type": [
                         "integer",
                         "null"
                     ],
-                    "minimum": 0
+                    "minimum": 0,
+                    "description": "For loose surfaces (sand/snow): 0 indicates packed underneath, a positive value is the depth of loose material on top."
                 }
             },
             "required": [
@@ -65,12 +69,13 @@
         },
         "roadsideLiner": {
             "type": "object",
+            "description": "A continuous roadside feature running parallel to the road.",
             "properties": {
                 "feature": {
                     "$ref": "#/definitions/roadsideLinerEnum"
                 },
-                "distanceFromRoadCenterMeters": {
-                    "type": "number",
+                "distanceFromRoadCenterCentimeters": {
+                    "type": "integer",
                     "minimum": 0
                 },
                 "widthCentimeters": {
@@ -84,9 +89,9 @@
             },
             "required": [
                 "feature",
-                "distanceFromRoadCenterMeters",
-                "widthMeters",
-                "heightMeters"
+                "distanceFromRoadCenterCentimeters",
+                "widthCentimeters",
+                "heightCentimeters"
             ]
         },
         "roadsideFeatureEnum": {
@@ -106,6 +111,7 @@
         },
         "roadsideFeature": {
             "type": "object",
+            "description": "A point roadside feature at a specific distance along the segment.",
             "properties": {
                 "feature": {
                     "$ref": "#/definitions/roadsideFeatureEnum"
@@ -130,78 +136,120 @@
             "required": [
                 "feature",
                 "distanceFromRoadCenterCentimeters",
+                "distanceAlongRoadCentimeters",
                 "widthCentimeters",
                 "heightCentimeters"
+            ]
+        },
+        "segment": {
+            "type": "object",
+            "properties": {
+                "seq": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Ordering within the stage."
+                },
+                "centerLineLengthMeters": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Length along the road centre line. First segment is zero."
+                },
+                "horizontalAngleDeltaDegrees": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "description": "Signed heading change over the segment (positive = left, negative = right)."
+                },
+                "leftSurfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/surfaceStrip"
+                    }
+                },
+                "rightSurfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/surfaceStrip"
+                    }
+                },
+                "leftFeatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideFeature"
+                    }
+                },
+                "rightFeatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideFeature"
+                    }
+                },
+                "leftLiners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideLiner"
+                    }
+                },
+                "rightLiners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideLiner"
+                    }
+                }
+            },
+            "required": [
+                "seq",
+                "centerLineLengthMeters"
             ]
         }
     },
     "properties": {
-        "PK": {
-            "type": "string"
+        "rally": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "name",
+                "date"
+            ]
         },
-        "SK": {
-            "type": "string"
+        "stage": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "name"
+            ]
         },
-        "SetID": {
-            "type": "integer",
-            "minimum": 0
-        },
-        "IndexSequence": {
-            "type": "integer",
-            "minimum": 0
-        },
-        "CenterLineLengthMeters": {
-            "type": [
-                "integer",
-                "null"
-            ],
-            "minimum": 1
-        },
-        "HorizontalAngleDeltaDegrees": {
-            "type": "integer"
-        },
-        "leftSurfaces": {
+        "segments": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/surfaceStrip"
-            }
-        },
-        "rightSurfaces": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/surfaceStrip"
-            }
-        },
-        "leftFeatures": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/roadsideFeature"
-            }
-        },
-        "rightFeatures": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/roadsideFeature"
-            }
-        },
-        "leftLiners": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/roadsideLiner"
-            }
-        },
-        "rightLiners": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/roadsideLiner"
+                "$ref": "#/definitions/segment"
             }
         }
     },
     "required": [
-        "PK",
-        "SK",
-        "SetID",
-        "IndexSequence",
-        "CenterLineLengthMeters"
+        "rally",
+        "stage",
+        "segments"
     ]
 }
