@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/pace-note.schema.json",
     "title": "GripPaceNotes",
     "description": "A pace-note document covering one note set (one stage, one version). Storage-agnostic: use natural keys (rallyName + rallyDate + stageName + setVersion) for identity across parties; optional UUIDs are provided for implementations that need stable internal IDs. Pacenote field values are stored under each note's `fieldValues` object keyed by the field.key defined in the rally's accompanying field-config (see field-config.schema.json) — different rallies can use entirely different shorthand systems by shipping different field configs.",
     "type": "object",
@@ -153,8 +154,10 @@
             }
         },
         "fieldConfig": {
-            "description": "The rally's field-config inlined into the pace-note document so a consumer can render the notes without a separate file fetch. Shape matches field-config.schema.json (schemaVersion + fields).",
-            "type": "object"
+            "description": "The rally's field-config inlined into the pace-note document so a consumer can render the notes without a separate file fetch. When present, this inlined copy is authoritative for the document. Shape validates against field-config.schema.json.",
+            "allOf": [
+                { "$ref": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json" }
+            ]
         },
         "notes": {
             "type": "array",

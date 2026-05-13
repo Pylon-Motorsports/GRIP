@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json",
     "title": "GripFieldConfig",
     "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Replaces the previous fixed-field model (direction / severity / duration / joiner / decorators / notes) so different rallies and disciplines can use entirely different shorthand systems.",
     "type": "object",
@@ -145,7 +146,54 @@
                     "minimum": 1,
                     "description": "kind:'freetext' only — soft cap on the number of lines rendered."
                 }
-            }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "chips" } }
+                    },
+                    "then": {
+                        "required": ["chips"],
+                        "properties": {
+                            "min": false,
+                            "max": false,
+                            "step": false,
+                            "defaultValue": false,
+                            "maxLines": false
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "number" } }
+                    },
+                    "then": {
+                        "properties": {
+                            "chips": false,
+                            "numeric": false,
+                            "maxLines": false
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "freetext" } }
+                    },
+                    "then": {
+                        "properties": {
+                            "chips": false,
+                            "min": false,
+                            "max": false,
+                            "step": false,
+                            "defaultValue": false,
+                            "numeric": false
+                        }
+                    }
+                }
+            ]
         },
         "chip": {
             "type": "object",

@@ -1,0 +1,138 @@
+{
+    "schemaVersion": 1,
+    "fields": [
+        {
+            "key": "caution",
+            "label": "Caution",
+            "kind": "chips",
+            "grid": { "col": 0, "row": 0, "w": 1, "h": 1 },
+            "renderOrder": 0,
+            "ttsOrder": 0,
+            "repeatable": true,
+            "compact": true,
+            "chips": [
+                { "value": "!" },
+                { "value": "!!" }
+            ]
+        },
+        {
+            "key": "direction",
+            "label": "Direction",
+            "kind": "chips",
+            "grid": { "col": 0, "row": 1, "w": 2, "h": 3 },
+            "renderOrder": 1,
+            "ttsOrder": 1,
+            "compact": true,
+            "justify": "center",
+            "chips": [
+                { "value": "L", "audible": "Left" },
+                { "value": "R", "audible": "Right" }
+            ]
+        },
+        {
+            "key": "severity",
+            "label": "Severity",
+            "kind": "chips",
+            "grid": { "col": 2, "row": 1, "w": 2, "h": 3 },
+            "renderOrder": 2,
+            "ttsOrder": 2,
+            "compact": true,
+            "justify": "center",
+            "chips": [
+                { "value": "1", "angle": 102, "textFormat": ["sub"] },
+                { "value": "2", "angle": 84,  "textFormat": ["sub"] },
+                { "value": "3", "angle": 66,  "textFormat": ["sub"] },
+                { "value": "4", "angle": 48,  "textFormat": ["sub"] },
+                { "value": "5", "angle": 30,  "textFormat": ["sub"] },
+                { "value": "6", "angle": 12,  "textFormat": ["sub"] }
+            ]
+        },
+        {
+            "key": "duration",
+            "label": "Duration",
+            "kind": "chips",
+            "grid": { "col": 4, "row": 1, "w": 1, "h": 3 },
+            "renderOrder": 3,
+            "ttsOrder": 3,
+            "compact": true,
+            "justify": "center",
+            "chips": [
+                { "value": "long" },
+                { "value": "short" }
+            ]
+        },
+        {
+            "key": "decorator",
+            "label": "Decorators",
+            "kind": "chips",
+            "grid": { "col": 0, "row": 4, "w": 5, "h": 1 },
+            "renderOrder": 4,
+            "ttsOrder": 4,
+            "repeatable": true,
+            "chips": [
+                { "value": "in" },
+                { "value": "out" },
+                { "value": "over" },
+                { "value": "keep" },
+                { "value": "maybe" },
+                { "value": "right" },
+                { "value": "left" },
+                { "value": "tighten" },
+                { "value": "open" },
+                { "value": "jump" },
+                { "value": "crest" },
+                { "value": "dip" },
+                { "value": "narrow" },
+                { "value": "wide" }
+            ]
+        },
+        {
+            "key": "link",
+            "label": "Link",
+            "kind": "chips",
+            "grid": { "col": 5, "row": 1, "w": 3, "h": 3 },
+            "renderOrder": 5,
+            "ttsOrder": 5,
+            "numeric": { "min": 10, "max": 900, "step": 10 },
+            "chips": [
+                { "value": "into" },
+                { "value": "and" },
+                { "value": "tightens" },
+                { "value": "opens" }
+            ]
+        },
+        {
+            "key": "linkDecorator",
+            "label": "Link Decorators",
+            "kind": "chips",
+            "grid": { "col": 5, "row": 0, "w": 3, "h": 1 },
+            "renderOrder": 6,
+            "ttsOrder": 6,
+            "repeatable": true,
+            "chips": [
+                { "value": "long" },
+                { "value": "short" },
+                { "value": "keep" },
+                { "value": "over" }
+            ]
+        },
+        {
+            "key": "notes",
+            "label": "Notes",
+            "kind": "freetext",
+            "grid": { "col": 0, "row": 5, "w": 5, "h": 2 },
+            "renderOrder": 7,
+            "ttsOrder": 7,
+            "maxLines": 3
+        },
+        {
+            "key": "linkNotes",
+            "label": "Link Notes",
+            "kind": "freetext",
+            "grid": { "col": 5, "row": 4, "w": 3, "h": 2 },
+            "renderOrder": 8,
+            "ttsOrder": 8,
+            "maxLines": 2
+        }
+    ]
+}
