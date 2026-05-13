@@ -1,0 +1,198 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "GripFieldConfig",
+    "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Replaces the previous fixed-field model (direction / severity / duration / joiner / decorators / notes) so different rallies and disciplines can use entirely different shorthand systems.",
+    "type": "object",
+    "required": [
+        "schemaVersion",
+        "fields"
+    ],
+    "definitions": {
+        "field": {
+            "type": "object",
+            "description": "A single pace-note field. The combination of key + kind + grid determines where it lives, how it's input, and how it renders.",
+            "required": [
+                "key",
+                "kind"
+            ],
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9_]+$",
+                    "description": "Unique field identifier within the rally. Used as the property name under paceNote.fieldValues."
+                },
+                "label": {
+                    "type": "string",
+                    "description": "Display label shown on the canvas slot and pickers."
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "chips",
+                        "freetext",
+                        "number"
+                    ],
+                    "description": "How the field is entered. chips = pick from an inline vocabulary; freetext = type any string; number = numeric input (e.g. distance)."
+                },
+                "grid": {
+                    "type": "object",
+                    "description": "Placement on the rally's input grid. Origin top-left.",
+                    "required": [
+                        "col",
+                        "row",
+                        "w",
+                        "h"
+                    ],
+                    "properties": {
+                        "col": {
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "row": {
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "w": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "h": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                },
+                "scaleW": {
+                    "type": "boolean",
+                    "description": "Hint: render-time scale width to fit content."
+                },
+                "scaleH": {
+                    "type": "boolean",
+                    "description": "Hint: render-time scale height to fit content (e.g. for repeatable freetext)."
+                },
+                "repeatable": {
+                    "type": "boolean",
+                    "description": "If true, fieldValues[key] is an array of primitives; otherwise a single primitive."
+                },
+                "renderOrder": {
+                    "type": "integer",
+                    "description": "Order in which this field's value(s) appear in the rendered shorthand text. Lower = earlier."
+                },
+                "ttsOrder": {
+                    "type": "integer",
+                    "description": "Order in which this field's value(s) are spoken via TTS. May differ from renderOrder."
+                },
+                "compact": {
+                    "type": "boolean",
+                    "description": "If true, no space is inserted between this field's tokens and adjacent compact tokens (matches the historic dir/sev/caution behaviour)."
+                },
+                "justify": {
+                    "type": "string",
+                    "enum": [
+                        "left",
+                        "center",
+                        "right"
+                    ],
+                    "description": "Text alignment of the rendered slot value."
+                },
+                "chips": {
+                    "type": "array",
+                    "description": "kind:'chips' only — the inline vocabulary for this field. Each chip is one allowed value.",
+                    "items": {
+                        "$ref": "#/definitions/chip"
+                    }
+                },
+                "min": {
+                    "type": "number",
+                    "description": "kind:'number' only — minimum value."
+                },
+                "max": {
+                    "type": "number",
+                    "description": "kind:'number' only — maximum value."
+                },
+                "step": {
+                    "type": "number",
+                    "description": "kind:'number' only — increment for scrollers / steppers."
+                },
+                "defaultValue": {
+                    "description": "kind:'number' only — initial value when the field is activated."
+                },
+                "numeric": {
+                    "type": "object",
+                    "description": "Optional augmentation for kind:'chips' fields — also exposes a numeric scroller alongside the chip grid. The value stored in fieldValues can be either a chip's value (string) or a number, whichever the user picked most recently.",
+                    "required": [
+                        "min",
+                        "max",
+                        "step"
+                    ],
+                    "properties": {
+                        "min": {
+                            "type": "number"
+                        },
+                        "max": {
+                            "type": "number"
+                        },
+                        "step": {
+                            "type": "number"
+                        },
+                        "defaultValue": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "maxLines": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "kind:'freetext' only — soft cap on the number of lines rendered."
+                }
+            }
+        },
+        "chip": {
+            "type": "object",
+            "description": "One entry in a chips-kind field's vocabulary.",
+            "required": [
+                "value"
+            ],
+            "properties": {
+                "value": {
+                    "type": "string",
+                    "description": "Canonical label stored on pace notes."
+                },
+                "audible": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "description": "Optional TTS override if the spoken form differs from the label."
+                },
+                "angle": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "description": "Tilt angle in degrees, used by severity-like fields placed on a compass dial."
+                },
+                "textFormat": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Rendering hints (e.g. ['sub'] for subscript)."
+                }
+            }
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the field-config schema this document conforms to.",
+            "const": 1
+        },
+        "fields": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/field"
+            }
+        }
+    }
+}

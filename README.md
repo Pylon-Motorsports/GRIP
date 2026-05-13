@@ -6,10 +6,11 @@ GRIP is storage-agnostic. Documents are identified by natural keys (rally name +
 
 ## Schemas
 
-### `pace-note.schema.json`
-A pace-note document covers one note set: a single stage, by a single driver, at a specific version. It carries a header (`rally`, `stage`, `set`), the per-rally chip vocabulary (`chips`), and the ordered list of calls (`notes`).
+### `field-config.schema.json`
+The per-rally definition of which pace-note fields exist. Each field carries a unique `key`, a `kind` (`chips` | `freetext` | `number`), grid placement (`col`, `row`, `w`, `h`), render/TTS order, and — for chips-kind fields — an inline vocabulary of allowed values with their audibles and rendering hints. Replaces the previous fixed-field model so rallies can ship entirely different shorthand systems.
 
-Chips define the legal values each pace-note field may take. They also describe how each value should be rendered (`textFormat`), spoken (`audible`), and — for severity chips — placed on a compass dial (`angle`, in degrees).
+### `pace-note.schema.json`
+A pace-note document covers one note set: a single stage, at a specific version. It carries a header (`rally`, `stage`, `set`), an optional inlined `fieldConfig`, and the ordered list of calls (`notes`). Each note holds its position/meta at the top level and the actual shorthand values under `fieldValues` keyed by the field-config's field keys.
 
 ### `stage-geometry.schema.json`
 A stage-geometry document describes a stage as an ordered list of segments. Each segment carries the length, heading change, and surface/roadside shape for the **end** of the segment. The first segment should be length zero and is used to initialize the starting shape.
@@ -23,44 +24,59 @@ For loose surfaces (sand, snow): `depthCentimeters = 0` means packed underneath;
   "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
   "stage": { "name": "SS1" },
   "set":   { "version": 1, "driver": "A. Mouton", "recceDate": "2025-08-11" },
-  "chips": [
-    { "category": "direction", "value": "left",  "sortOrder": 0 },
-    { "category": "direction", "value": "right", "sortOrder": 1 },
-    { "category": "severity",  "value": "6", "sortOrder": 0, "angle": 12, "textFormat": ["sub"] },
-    { "category": "caution_decorator", "value": "!!", "sortOrder": 0 }
-  ],
+  "fieldConfig": {
+    "schemaVersion": 1,
+    "fields": [
+      {
+        "key": "direction", "label": "Direction", "kind": "chips",
+        "grid": { "col": 0, "row": 0, "w": 2, "h": 3 },
+        "renderOrder": 0, "ttsOrder": 0, "compact": true,
+        "chips": [
+          { "value": "L", "audible": "Left" },
+          { "value": "R", "audible": "Right" }
+        ]
+      },
+      {
+        "key": "severity", "label": "Severity", "kind": "chips",
+        "grid": { "col": 2, "row": 0, "w": 2, "h": 3 },
+        "renderOrder": 1, "ttsOrder": 1, "compact": true,
+        "chips": [
+          { "value": "6", "angle": 12, "textFormat": ["sub"] }
+        ]
+      },
+      {
+        "key": "link", "label": "Link", "kind": "chips",
+        "grid": { "col": 4, "row": 0, "w": 2, "h": 1 },
+        "renderOrder": 2, "ttsOrder": 2,
+        "numeric": { "min": 10, "max": 900, "step": 10 },
+        "chips": [
+          { "value": "tightens" }
+        ]
+      }
+    ]
+  },
   "notes": [
     {
       "seq": 12,
-      "indexOdo": null,
       "indexLandmark": null,
-      "indexSequence": 12,
-      "direction": "left",
-      "severity": "6",
-      "duration": "long",
-      "decorators": ["keep", "in"],
-      "joiner": "tightens",
-      "joinerDecorators": [],
-      "notes": null,
-      "joinerNotes": null,
-      "recceAt": "2025-08-11T15:30:00Z",
-      "updatedAt": "2025-08-11T15:30:00Z"
+      "fieldValues": {
+        "direction": "L",
+        "severity": "6",
+        "duration": "long",
+        "decorator": ["keep", "in"],
+        "link": "tightens"
+      },
+      "recceAt": "2025-08-11T15:30:00Z"
     },
     {
       "seq": 13,
-      "indexOdo": null,
       "indexLandmark": "red house",
-      "indexSequence": 13,
-      "direction": null,
-      "severity": null,
-      "duration": null,
-      "decorators": ["!!", "keep", "right", "over", "jump", "maybe"],
-      "joiner": "100",
-      "joinerDecorators": [],
-      "notes": null,
-      "joinerNotes": null,
-      "recceAt": "2025-08-11T15:30:00Z",
-      "updatedAt": "2025-08-11T15:30:00Z"
+      "fieldValues": {
+        "caution": ["!!"],
+        "decorator": ["keep", "right", "over", "jump", "maybe"],
+        "link": 100
+      },
+      "recceAt": "2025-08-11T15:30:00Z"
     }
   ]
 }

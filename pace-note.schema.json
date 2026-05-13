@@ -1,12 +1,15 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema#",
     "title": "GripPaceNotes",
-    "description": "A pace-note document covering one note set (one stage, one version). Storage-agnostic: use natural keys (rallyName + rallyDate + stageName + setVersion) for identity across parties; optional UUIDs are provided for implementations that need stable internal IDs.",
+    "description": "A pace-note document covering one note set (one stage, one version). Storage-agnostic: use natural keys (rallyName + rallyDate + stageName + setVersion) for identity across parties; optional UUIDs are provided for implementations that need stable internal IDs. Pacenote field values are stored under each note's `fieldValues` object keyed by the field.key defined in the rally's accompanying field-config (see field-config.schema.json) — different rallies can use entirely different shorthand systems by shipping different field configs.",
     "type": "object",
     "definitions": {
         "paceNote": {
             "type": "object",
-            "description": "A single pace-note call within a set.",
+            "description": "A single pace-note call within a set. Position/meta lives at the top level; the actual shorthand values live in fieldValues keyed by the rally's field-config keys.",
+            "required": [
+                "seq"
+            ],
             "properties": {
                 "seq": {
                     "type": "integer",
@@ -32,55 +35,25 @@
                         "null"
                     ]
                 },
-                "direction": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "severity": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "duration": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "decorators": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
+                "fieldValues": {
+                    "type": "object",
+                    "description": "Map of field.key → value. Values are primitives (string for chip selections / freetext / numeric-string distances, number for true numeric fields) or arrays of primitives when the field is repeatable. Field keys are defined by the accompanying field-config document.",
+                    "additionalProperties": {
+                        "oneOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "null" },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "oneOf": [
+                                        { "type": "string" },
+                                        { "type": "number" }
+                                    ]
+                                }
+                            }
+                        ]
                     }
-                },
-                "joiner": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "joinerDecorators": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "notes": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "description": "Freetext annotation for the call."
-                },
-                "joinerNotes": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "description": "Freetext annotation for the joiner."
                 },
                 "recceAt": {
                     "type": [
@@ -96,66 +69,16 @@
                     ],
                     "format": "date-time"
                 }
-            },
-            "required": [
-                "seq"
-            ]
-        },
-        "chip": {
-            "type": "object",
-            "description": "One entry in a rally's chip vocabulary. Chips define the legal values for each pace-note field and optionally how they are rendered or spoken.",
-            "properties": {
-                "category": {
-                    "type": "string",
-                    "enum": [
-                        "direction",
-                        "severity",
-                        "duration",
-                        "joiner",
-                        "decorator",
-                        "caution_decorator",
-                        "joiner_decorator"
-                    ]
-                },
-                "value": {
-                    "type": "string",
-                    "description": "Canonical label stored on pace notes."
-                },
-                "audible": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "description": "Optional TTS override if the spoken form differs from the label."
-                },
-                "sortOrder": {
-                    "type": "integer",
-                    "minimum": 0
-                },
-                "angle": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "description": "Tilt angle in degrees for severity chips placed on a compass dial. Combined with car/course geometry this can be mapped to a turn radius."
-                },
-                "textFormat": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Rendering hints (e.g. 'sub' for subscript)."
-                }
-            },
-            "required": [
-                "category",
-                "value"
-            ]
+            }
         }
     },
     "properties": {
         "rally": {
             "type": "object",
+            "required": [
+                "name",
+                "date"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -183,14 +106,13 @@
                     "format": "uuid",
                     "description": "Optional stable identifier for implementations that need it. Not required for exchange; natural keys are authoritative."
                 }
-            },
-            "required": [
-                "name",
-                "date"
-            ]
+            }
         },
         "stage": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -199,13 +121,13 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            "required": [
-                "name"
-            ]
+            }
         },
         "set": {
             "type": "object",
+            "required": [
+                "version"
+            ],
             "properties": {
                 "version": {
                     "type": "integer",
@@ -228,17 +150,11 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            "required": [
-                "version"
-            ]
+            }
         },
-        "chips": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/chip"
-            },
-            "description": "Per-rally chip vocabulary. Needed for consistent rendering and TTS across devices."
+        "fieldConfig": {
+            "description": "The rally's field-config inlined into the pace-note document so a consumer can render the notes without a separate file fetch. Shape matches field-config.schema.json (schemaVersion + fields).",
+            "type": "object"
         },
         "notes": {
             "type": "array",
