@@ -236,6 +236,13 @@
             "description": "Version of the field-config schema this document conforms to.",
             "const": 1
         },
+        "promptOrder": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "Ordered list of field keys the recce UI's 'Next:' prompt strip cycles through. After each tap the strip advances to the next field in this list that is still empty on the current note. Fields not listed here are never auto-prompted (users can still tap their slot to edit). Optional — consumers may default to walking every chips-kind field by renderOrder when absent."
+        },
         "fields": {
             "type": "array",
             "items": {

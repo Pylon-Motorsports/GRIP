@@ -1,5 +1,6 @@
 {
     "schemaVersion": 1,
+    "promptOrder": ["direction", "severity", "link"],
     "fields": [
         {
             "key": "caution",
