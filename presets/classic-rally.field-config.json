@@ -3,42 +3,53 @@
     "promptOrder": ["direction", "severity", "link"],
     "fields": [
         {
+            "key": "prefix",
+            "label": "Prefix",
+            "kind": "chips",
+            "grid": { "col": 0, "row": 0, "w": 4, "h": 1 },
+            "renderOrder": 0,
+            "ttsOrder": 0,
+            "chips": [
+                { "value": "Ea", "audible": "Early" },
+                { "value": "La", "audible": "Late" }
+            ]
+        },
+        {
             "key": "caution",
             "label": "Caution",
             "kind": "chips",
-            "grid": { "col": 0, "row": 0, "w": 1, "h": 1 },
-            "renderOrder": 0,
-            "ttsOrder": 0,
-            "repeatable": true,
-            "compact": true,
+            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "renderOrder": 1,
+            "ttsOrder": 1,
             "chips": [
-                { "value": "!" },
-                { "value": "!!" }
+                { "value": "!", "audible": "Caution" },
+                { "value": "!!", "audible": "Double Caution" },
+                { "value": "!!!", "audible": "Triple Caution" },
+                { "value": "©", "audible": "Care" }
             ]
         },
         {
             "key": "direction",
             "label": "Direction",
             "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 2, "h": 3 },
-            "renderOrder": 1,
-            "ttsOrder": 1,
-            "compact": true,
-            "justify": "center",
+            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "renderOrder": 2,
+            "ttsOrder": 2,
             "chips": [
                 { "value": "L", "audible": "Left" },
-                { "value": "R", "audible": "Right" }
+                { "value": "R", "audible": "Right" },
+                { "value": "KL", "audible": "Keep Left" },
+                { "value": "KM", "audible": "Keep Mid" },
+                { "value": "KR", "audible": "Keep Right" }
             ]
         },
         {
             "key": "severity",
             "label": "Severity",
             "kind": "chips",
-            "grid": { "col": 2, "row": 1, "w": 2, "h": 3 },
-            "renderOrder": 2,
-            "ttsOrder": 2,
-            "compact": true,
-            "justify": "center",
+            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "renderOrder": 3,
+            "ttsOrder": 3,
             "chips": [
                 { "value": "1", "angle": 102, "textFormat": ["sub"] },
                 { "value": "2", "angle": 84,  "textFormat": ["sub"] },
@@ -52,87 +63,93 @@
             "key": "duration",
             "label": "Duration",
             "kind": "chips",
-            "grid": { "col": 4, "row": 1, "w": 1, "h": 3 },
-            "renderOrder": 3,
-            "ttsOrder": 3,
-            "compact": true,
-            "justify": "center",
+            "grid": { "col": 0, "row": 1, "w": 4, "h": 2 },
+            "renderOrder": 4,
+            "ttsOrder": 4,
             "chips": [
                 { "value": "long" },
-                { "value": "short" }
+                { "value": "short" },
+                { "value": "XL", "audible": "extra long" }
             ]
         },
         {
             "key": "decorator",
             "label": "Decorators",
             "kind": "chips",
-            "grid": { "col": 0, "row": 4, "w": 5, "h": 1 },
-            "renderOrder": 4,
-            "ttsOrder": 4,
+            "grid": { "col": 0, "row": 2, "w": 5, "h": 2 },
+            "renderOrder": 5,
+            "ttsOrder": 5,
             "repeatable": true,
             "chips": [
-                { "value": "in" },
-                { "value": "out" },
-                { "value": "over" },
-                { "value": "keep" },
-                { "value": "maybe" },
-                { "value": "right" },
-                { "value": "left" },
-                { "value": "tighten" },
-                { "value": "open" },
-                { "value": "jump" },
-                { "value": "crest" },
-                { "value": "dip" },
-                { "value": "narrow" },
-                { "value": "wide" }
+                { "value": "/B", "audible": "Over Brow" },
+                { "value": "/C", "audible": "Over Crest" },
+                { "value": "/J", "audible": "Over Jump" },
+                { "value": "/][", "audible": "Over Bridge" },
+                { "value": "Cut" },
+                { "value": "Don't" },
+                { "value": "Keep In" },
+                { "value": "Keep Out" },
+                { "value": "/\\", "audible": "Narrows" },
+                { "value": "\\/", "audible": "Widens" },
+                { "value": "Slippy" },
+                { "value": "Splash" },
+                { "value": "Bumps" },
+                { "value": "↑", "audible": "Up" },
+                { "value": "↓", "audible": "Down" },
+                { "value": "OC", "audible": "Off Camber" },
+                { "value": "?", "audible": "Maybe" }
             ]
         },
         {
             "key": "link",
             "label": "Link",
             "kind": "chips",
-            "grid": { "col": 5, "row": 1, "w": 3, "h": 3 },
-            "renderOrder": 5,
-            "ttsOrder": 5,
+            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "renderOrder": 6,
+            "ttsOrder": 6,
             "numeric": { "min": 10, "max": 900, "step": 10 },
             "chips": [
-                { "value": "into" },
-                { "value": "and" },
-                { "value": "tightens" },
-                { "value": "opens" }
+                { "value": "→", "audible": "into" },
+                { "value": "&", "audible": "and" },
+                { "value": "<", "audible": "opens" },
+                { "value": ">", "audible": "tightens" }
             ]
         },
         {
             "key": "linkDecorator",
             "label": "Link Decorators",
             "kind": "chips",
-            "grid": { "col": 5, "row": 0, "w": 3, "h": 1 },
-            "renderOrder": 6,
-            "ttsOrder": 6,
+            "grid": { "col": 0, "row": 3, "w": 5, "h": 1 },
+            "renderOrder": 7,
+            "ttsOrder": 7,
             "repeatable": true,
             "chips": [
-                { "value": "long" },
-                { "value": "short" },
-                { "value": "keep" },
-                { "value": "over" }
+                { "value": "/\\", "audible": "Narrows" },
+                { "value": "\\/", "audible": "Widens" },
+                { "value": "Slippy" },
+                { "value": "Splash" },
+                { "value": "Bumps" },
+                { "value": "↑", "audible": "Up" },
+                { "value": "↓", "audible": "Down" },
+                { "value": "?", "audible": "Maybe" }
             ]
         },
         {
             "key": "notes",
             "label": "Notes",
             "kind": "freetext",
-            "grid": { "col": 0, "row": 5, "w": 5, "h": 2 },
-            "renderOrder": 7,
-            "ttsOrder": 7,
+            "grid": { "col": 0, "row": 4, "w": 5, "h": 2 },
+            "renderOrder": 8,
+            "ttsOrder": 8,
             "maxLines": 3
         },
         {
             "key": "linkNotes",
             "label": "Link Notes",
             "kind": "freetext",
-            "grid": { "col": 5, "row": 4, "w": 3, "h": 2 },
-            "renderOrder": 8,
-            "ttsOrder": 8,
+            "grid": { "col": 0, "row": 4, "w": 5, "h": 2 },
+            "renderOrder": 9,
+            "ttsOrder": 9,
             "maxLines": 2
         }
     ]

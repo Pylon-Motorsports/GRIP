@@ -1,0 +1,91 @@
+{
+    "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+    "stage": { "name": "SS1" },
+    "set":   { "version": 1, "driver": "A. Mouton", "recceDate": "2025-08-11" },
+    "fieldConfig": {
+        "schemaVersion": 1,
+        "fields": [
+            {
+                "key": "caution",
+                "label": "Caution",
+                "kind": "chips",
+                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "renderOrder": 0,
+                "ttsOrder": 0,
+                "chips": [
+                    { "value": "!",  "audible": "Caution" },
+                    { "value": "!!", "audible": "Double Caution" }
+                ]
+            },
+            {
+                "key": "direction",
+                "label": "Direction",
+                "kind": "chips",
+                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "renderOrder": 1,
+                "ttsOrder": 1,
+                "chips": [
+                    { "value": "L", "audible": "Left" },
+                    { "value": "R", "audible": "Right" }
+                ]
+            },
+            {
+                "key": "severity",
+                "label": "Severity",
+                "kind": "chips",
+                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "renderOrder": 2,
+                "ttsOrder": 2,
+                "chips": [
+                    { "value": "6", "angle": 12, "textFormat": ["sub"] }
+                ]
+            },
+            {
+                "key": "duration",
+                "label": "Duration",
+                "kind": "chips",
+                "grid": { "col": 0, "row": 1, "w": 4, "h": 2 },
+                "renderOrder": 3,
+                "ttsOrder": 3,
+                "chips": [
+                    { "value": "long" },
+                    { "value": "short" }
+                ]
+            },
+            {
+                "key": "link",
+                "label": "Link",
+                "kind": "chips",
+                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "renderOrder": 4,
+                "ttsOrder": 4,
+                "numeric": { "min": 10, "max": 900, "step": 10 },
+                "chips": [
+                    { "value": ">", "audible": "tightens" }
+                ]
+            }
+        ]
+    },
+    "notes": [
+        {
+            "seq": 12,
+            "indexLandmark": null,
+            "fieldValues": {
+                "direction": "L",
+                "severity": "6",
+                "duration": "long",
+                "link": ">"
+            },
+            "recceAt": "2025-08-11T15:30:00Z"
+        },
+        {
+            "seq": 13,
+            "indexLandmark": "red house",
+            "fieldValues": {
+                "caution": "!!",
+                "link": 100
+            },
+            "recceAt": "2025-08-11T15:30:00Z"
+        }
+    ]
+}

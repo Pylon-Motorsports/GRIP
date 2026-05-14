@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json",
     "title": "GripFieldConfig",
-    "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Replaces the previous fixed-field model (direction / severity / duration / joiner / decorators / notes) so different rallies and disciplines can use entirely different shorthand systems.",
+    "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Different rallies and disciplines can use entirely different shorthand systems by shipping different field configs.",
     "type": "object",
     "required": [
         "schemaVersion",
@@ -77,15 +77,11 @@
                 },
                 "renderOrder": {
                     "type": "integer",
-                    "description": "Order in which this field's value(s) appear in the rendered shorthand text. Lower = earlier."
+                    "description": "Sequence order when multiple fields share a grid cell (same col/row/w/h). For example, caution + direction + severity stacked in one slot use renderOrder to decide which renders first. Across distinct cells the spatial layout determines order; renderOrder breaks ties within a cell. Lower = earlier."
                 },
                 "ttsOrder": {
                     "type": "integer",
-                    "description": "Order in which this field's value(s) are spoken via TTS. May differ from renderOrder."
-                },
-                "compact": {
-                    "type": "boolean",
-                    "description": "If true, no space is inserted between this field's tokens and adjacent compact tokens (matches the historic dir/sev/caution behaviour)."
+                    "description": "Sequence order in which this field's value(s) are spoken via TTS. Follows the same shared-cell semantics as renderOrder but may diverge if a crew speaks fields in a different order than they read them."
                 },
                 "justify": {
                     "type": "string",
@@ -94,7 +90,8 @@
                         "center",
                         "right"
                     ],
-                    "description": "Text alignment of the rendered slot value."
+                    "default": "center",
+                    "description": "Text alignment of the rendered slot value. Defaults to center."
                 },
                 "chips": {
                     "type": "array",
