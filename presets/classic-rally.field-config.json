@@ -1,6 +1,10 @@
 {
     "schemaVersion": 1,
-    "promptOrder": ["direction", "severity", "link"],
+    "extensions": {
+        "grip-note": {
+            "promptOrder": ["direction", "severity", "link"]
+        }
+    },
     "fields": [
         {
             "key": "prefix",
@@ -51,12 +55,12 @@
             "renderOrder": 3,
             "ttsOrder": 3,
             "chips": [
-                { "value": "1", "angle": 102, "textFormat": ["sub"] },
-                { "value": "2", "angle": 84,  "textFormat": ["sub"] },
-                { "value": "3", "angle": 66,  "textFormat": ["sub"] },
-                { "value": "4", "angle": 48,  "textFormat": ["sub"] },
-                { "value": "5", "angle": 30,  "textFormat": ["sub"] },
-                { "value": "6", "angle": 12,  "textFormat": ["sub"] }
+                { "value": "1", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 102 } } },
+                { "value": "2", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 84  } } },
+                { "value": "3", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 66  } } },
+                { "value": "4", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 48  } } },
+                { "value": "5", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 30  } } },
+                { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12  } } }
             ]
         },
         {

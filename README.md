@@ -7,7 +7,11 @@ GRIP is storage-agnostic. Documents are identified by natural keys (rally name +
 ## Schemas
 
 ### `field-config.schema.json`
-The per-rally definition of which pace-note fields exist. Each field carries a unique `key`, a `kind` (`chips` | `freetext` | `number`), grid placement (`col`, `row`, `w`, `h`), render/TTS order, and — for chips-kind fields — an inline vocabulary of allowed values with their audibles and rendering hints. Replaces the previous fixed-field model so rallies can ship entirely different shorthand systems.
+The per-rally definition of which pace-note fields exist. Each field carries a unique `key`, a `kind` (`chips` | `freetext` | `number`), grid placement (`colStart` / optional `colEnd` / `row` / `h`), render/TTS order, and — for chips-kind fields — an inline vocabulary of allowed values with their audibles and rendering hints. Different rallies can ship entirely different shorthand systems by shipping different field configs.
+
+Columns are alignment **lanes**, not pixel positions: fields sharing the same `colStart` align vertically across rows; lane widths scale to content. Multi-lane spans are expressed inclusively via `colEnd`. Rows and `h` are spatial — renderers should preserve them.
+
+App-specific data lives under namespaced `extensions` objects on the top-level config, on each field, and on each chip. Keys are app slugs (kebab-case, e.g. `grip-note`); each app owns its own subtree. Consumers should pass unknown namespaces through untouched. This is how things like GRIP-Note's `promptOrder` (top-level) or a compass-dial renderer's per-chip `angle` (chip-level) live without bloating the core protocol.
 
 ### `pace-note.schema.json`
 A pace-note document covers one note set: a single stage, at a specific version. It carries a header (`rally`, `stage`, `set`), an optional inlined `fieldConfig`, and the ordered list of calls (`notes`). Each note holds its position/meta at the top level and the actual shorthand values under `fieldValues` keyed by the field-config's field keys.

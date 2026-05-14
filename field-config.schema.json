@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json",
     "title": "GripFieldConfig",
-    "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Different rallies and disciplines can use entirely different shorthand systems by shipping different field configs.",
+    "description": "Per-rally configuration of pace-note fields. Each rally defines which fields appear on a pacenote (name, kind, grid placement, render/TTS order, optional inline chip vocabulary). Pace notes then store their values as a JSON object keyed by field.key. Different rallies and disciplines can use entirely different shorthand systems by shipping different field configs. App-specific data (rendering hints unique to one renderer, UX state, etc.) lives under namespaced `extensions` objects on the top-level config, on each field, and on each chip — apps own their own subtree, keyed by a kebab-case app slug.",
     "type": "object",
     "required": [
         "schemaVersion",
@@ -38,6 +38,7 @@
                 "grid": {
                     "type": "object",
                     "description": "Placement on the rally's input grid. Columns are alignment lanes (0-indexed, ordered left-to-right): fields sharing the same colStart align vertically regardless of which row they're on. Lane widths scale to fit content. A span across multiple lanes is expressed with colEnd (inclusive); omit colEnd for a single-lane field. Rows are spatial: row is the vertical position (0-indexed from top) and h is the row span — renderers should preserve these for reliable export.",
+                    "additionalProperties": false,
                     "required": [
                         "colStart",
                         "row",
@@ -121,6 +122,7 @@
                 "numeric": {
                     "type": "object",
                     "description": "Optional augmentation for kind:'chips' fields — also exposes a numeric scroller alongside the chip grid. The value stored in fieldValues can be either a chip's value (string) or a number, whichever the user picked most recently.",
+                    "additionalProperties": false,
                     "required": [
                         "min",
                         "max",
@@ -145,8 +147,16 @@
                     "type": "integer",
                     "minimum": 1,
                     "description": "kind:'freetext' only — soft cap on the number of lines rendered."
+                },
+                "extensions": {
+                    "type": "object",
+                    "description": "App-specific namespaced data attached to this field. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. Consumers should pass through unrecognized namespaces unchanged.",
+                    "additionalProperties": {
+                        "type": "object"
+                    }
                 }
             },
+            "additionalProperties": false,
             "allOf": [
                 {
                     "if": {
@@ -198,6 +208,7 @@
         "chip": {
             "type": "object",
             "description": "One entry in a chips-kind field's vocabulary.",
+            "additionalProperties": false,
             "required": [
                 "value"
             ],
@@ -213,40 +224,41 @@
                     ],
                     "description": "Optional TTS override if the spoken form differs from the label."
                 },
-                "angle": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
-                    "description": "Tilt angle in degrees, used by severity-like fields placed on a compass dial."
-                },
                 "textFormat": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     },
                     "description": "Rendering hints (e.g. ['sub'] for subscript)."
+                },
+                "extensions": {
+                    "type": "object",
+                    "description": "App-specific namespaced data attached to this chip. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. For example, a compass-dial renderer can store its `angle` value under its own namespace without other consumers having to know about it.",
+                    "additionalProperties": {
+                        "type": "object"
+                    }
                 }
             }
         }
     },
+    "additionalProperties": false,
     "properties": {
         "schemaVersion": {
             "type": "integer",
             "description": "Version of the field-config schema this document conforms to.",
             "const": 1
         },
-        "promptOrder": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "description": "Ordered list of field keys the recce UI's 'Next:' prompt strip cycles through. After each tap the strip advances to the next field in this list that is still empty on the current note. Fields not listed here are never auto-prompted (users can still tap their slot to edit). Optional — consumers may default to walking every chips-kind field by renderOrder when absent."
-        },
         "fields": {
             "type": "array",
             "items": {
                 "$ref": "#/definitions/field"
+            }
+        },
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data attached to the field-config as a whole (e.g. recce UX flow state, presentation profiles, app-managed metadata). Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. Consumers should pass through unrecognized namespaces unchanged.",
+            "additionalProperties": {
+                "type": "object"
             }
         }
     }

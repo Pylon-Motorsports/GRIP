@@ -37,7 +37,7 @@
                 "renderOrder": 2,
                 "ttsOrder": 2,
                 "chips": [
-                    { "value": "6", "angle": 12, "textFormat": ["sub"] }
+                    { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12 } } }
                 ]
             },
             {
