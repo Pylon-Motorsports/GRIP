@@ -6,7 +6,7 @@
             "key": "prefix",
             "label": "Prefix",
             "kind": "chips",
-            "grid": { "col": 0, "row": 0, "w": 4, "h": 1 },
+            "grid": { "colStart": 1, "row": 0, "h": 1 },
             "renderOrder": 0,
             "ttsOrder": 0,
             "chips": [
@@ -18,7 +18,7 @@
             "key": "caution",
             "label": "Caution",
             "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "grid": { "colStart": 0, "row": 1, "h": 2 },
             "renderOrder": 1,
             "ttsOrder": 1,
             "chips": [
@@ -32,7 +32,7 @@
             "key": "direction",
             "label": "Direction",
             "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "grid": { "colStart": 1, "row": 1, "h": 2 },
             "renderOrder": 2,
             "ttsOrder": 2,
             "chips": [
@@ -47,7 +47,7 @@
             "key": "severity",
             "label": "Severity",
             "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+            "grid": { "colStart": 1, "row": 1, "h": 2 },
             "renderOrder": 3,
             "ttsOrder": 3,
             "chips": [
@@ -63,7 +63,7 @@
             "key": "duration",
             "label": "Duration",
             "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 4, "h": 2 },
+            "grid": { "colStart": 2, "row": 1, "h": 2 },
             "renderOrder": 4,
             "ttsOrder": 4,
             "chips": [
@@ -73,12 +73,27 @@
             ]
         },
         {
+            "key": "link",
+            "label": "Link",
+            "kind": "chips",
+            "grid": { "colStart": 3, "row": 1, "h": 2 },
+            "renderOrder": 5,
+            "ttsOrder": 5,
+            "numeric": { "min": 10, "max": 900, "step": 10 },
+            "chips": [
+                { "value": "→", "audible": "into" },
+                { "value": "&", "audible": "and" },
+                { "value": "<", "audible": "opens" },
+                { "value": ">", "audible": "tightens" }
+            ]
+        },
+        {
             "key": "decorator",
             "label": "Decorators",
             "kind": "chips",
-            "grid": { "col": 0, "row": 2, "w": 5, "h": 2 },
-            "renderOrder": 5,
-            "ttsOrder": 5,
+            "grid": { "colStart": 0, "colEnd": 3, "row": 3, "h": 1 },
+            "renderOrder": 6,
+            "ttsOrder": 6,
             "repeatable": true,
             "chips": [
                 { "value": "/B", "audible": "Over Brow" },
@@ -101,25 +116,10 @@
             ]
         },
         {
-            "key": "link",
-            "label": "Link",
-            "kind": "chips",
-            "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
-            "renderOrder": 6,
-            "ttsOrder": 6,
-            "numeric": { "min": 10, "max": 900, "step": 10 },
-            "chips": [
-                { "value": "→", "audible": "into" },
-                { "value": "&", "audible": "and" },
-                { "value": "<", "audible": "opens" },
-                { "value": ">", "audible": "tightens" }
-            ]
-        },
-        {
             "key": "linkDecorator",
             "label": "Link Decorators",
             "kind": "chips",
-            "grid": { "col": 0, "row": 3, "w": 5, "h": 1 },
+            "grid": { "colStart": 0, "colEnd": 3, "row": 4, "h": 1 },
             "renderOrder": 7,
             "ttsOrder": 7,
             "repeatable": true,
@@ -138,7 +138,7 @@
             "key": "notes",
             "label": "Notes",
             "kind": "freetext",
-            "grid": { "col": 0, "row": 4, "w": 5, "h": 2 },
+            "grid": { "colStart": 0, "colEnd": 3, "row": 5, "h": 2 },
             "renderOrder": 8,
             "ttsOrder": 8,
             "maxLines": 3
@@ -147,7 +147,7 @@
             "key": "linkNotes",
             "label": "Link Notes",
             "kind": "freetext",
-            "grid": { "col": 0, "row": 4, "w": 5, "h": 2 },
+            "grid": { "colStart": 0, "colEnd": 3, "row": 7, "h": 2 },
             "renderOrder": 9,
             "ttsOrder": 9,
             "maxLines": 2

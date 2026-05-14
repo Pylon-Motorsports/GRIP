@@ -37,29 +37,32 @@
                 },
                 "grid": {
                     "type": "object",
-                    "description": "Placement on the rally's input grid. Origin top-left.",
+                    "description": "Placement on the rally's input grid. Columns are alignment lanes (0-indexed, ordered left-to-right): fields sharing the same colStart align vertically regardless of which row they're on. Lane widths scale to fit content. A span across multiple lanes is expressed with colEnd (inclusive); omit colEnd for a single-lane field. Rows are spatial: row is the vertical position (0-indexed from top) and h is the row span — renderers should preserve these for reliable export.",
                     "required": [
-                        "col",
+                        "colStart",
                         "row",
-                        "w",
                         "h"
                     ],
                     "properties": {
-                        "col": {
+                        "colStart": {
                             "type": "integer",
-                            "minimum": 0
+                            "minimum": 0,
+                            "description": "Leftmost alignment lane the field occupies. 0-indexed."
+                        },
+                        "colEnd": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "description": "Rightmost alignment lane the field occupies (inclusive). Optional; defaults to colStart for a single-lane field. Must be >= colStart (enforced by consumers, not the schema)."
                         },
                         "row": {
                             "type": "integer",
-                            "minimum": 0
-                        },
-                        "w": {
-                            "type": "integer",
-                            "minimum": 1
+                            "minimum": 0,
+                            "description": "Vertical position. 0-indexed from the top."
                         },
                         "h": {
                             "type": "integer",
-                            "minimum": 1
+                            "minimum": 1,
+                            "description": "Number of row units the field occupies vertically."
                         }
                     }
                 },

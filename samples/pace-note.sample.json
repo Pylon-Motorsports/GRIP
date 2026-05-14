@@ -9,7 +9,7 @@
                 "key": "caution",
                 "label": "Caution",
                 "kind": "chips",
-                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "grid": { "colStart": 0, "row": 1, "h": 2 },
                 "renderOrder": 0,
                 "ttsOrder": 0,
                 "chips": [
@@ -21,7 +21,7 @@
                 "key": "direction",
                 "label": "Direction",
                 "kind": "chips",
-                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "grid": { "colStart": 1, "row": 1, "h": 2 },
                 "renderOrder": 1,
                 "ttsOrder": 1,
                 "chips": [
@@ -33,7 +33,7 @@
                 "key": "severity",
                 "label": "Severity",
                 "kind": "chips",
-                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "grid": { "colStart": 1, "row": 1, "h": 2 },
                 "renderOrder": 2,
                 "ttsOrder": 2,
                 "chips": [
@@ -44,7 +44,7 @@
                 "key": "duration",
                 "label": "Duration",
                 "kind": "chips",
-                "grid": { "col": 0, "row": 1, "w": 4, "h": 2 },
+                "grid": { "colStart": 2, "row": 1, "h": 2 },
                 "renderOrder": 3,
                 "ttsOrder": 3,
                 "chips": [
@@ -56,7 +56,7 @@
                 "key": "link",
                 "label": "Link",
                 "kind": "chips",
-                "grid": { "col": 0, "row": 1, "w": 2, "h": 2 },
+                "grid": { "colStart": 3, "row": 1, "h": 2 },
                 "renderOrder": 4,
                 "ttsOrder": 4,
                 "numeric": { "min": 10, "max": 900, "step": 10 },
