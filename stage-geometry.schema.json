@@ -50,7 +50,7 @@
                         "null"
                     ],
                     "minimum": 0,
-                    "description": "For loose surfaces (sand/snow): 0 indicates packed underneath, a positive value is the depth of loose material on top."
+                    "description": "For surfaces with overlay (sand, snow, water): 0 indicates packed/dry underneath, a positive value is the depth of the loose material or water on top."
                 }
             },
             "required": [
