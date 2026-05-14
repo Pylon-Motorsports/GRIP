@@ -1,5 +1,5 @@
 {
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "extensions": {
         "grip-note": {
             "promptOrder": ["direction", "severity", "link"]
@@ -11,11 +11,11 @@
             "label": "Prefix",
             "kind": "chips",
             "grid": { "colStart": 1, "row": 0, "h": 1 },
-            "renderOrder": 0,
+            "horizontalRenderOrder": 0,
             "ttsOrder": 0,
             "chips": [
-                { "value": "Ea", "audible": "Early" },
-                { "value": "La", "audible": "Late" }
+                { "value": "EARLY" },
+                { "value": "LATE" }
             ]
         },
         {
@@ -23,7 +23,7 @@
             "label": "Caution",
             "kind": "chips",
             "grid": { "colStart": 0, "row": 1, "h": 2 },
-            "renderOrder": 1,
+            "horizontalRenderOrder": 1,
             "ttsOrder": 1,
             "chips": [
                 { "value": "!", "audible": "Caution" },
@@ -37,7 +37,7 @@
             "label": "Direction",
             "kind": "chips",
             "grid": { "colStart": 1, "row": 1, "h": 2 },
-            "renderOrder": 2,
+            "horizontalRenderOrder": 2,
             "ttsOrder": 2,
             "chips": [
                 { "value": "L", "audible": "Left" },
@@ -52,7 +52,7 @@
             "label": "Severity",
             "kind": "chips",
             "grid": { "colStart": 1, "row": 1, "h": 2 },
-            "renderOrder": 3,
+            "horizontalRenderOrder": 3,
             "ttsOrder": 3,
             "chips": [
                 { "value": "1", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 102 } } },
@@ -68,7 +68,7 @@
             "label": "Duration",
             "kind": "chips",
             "grid": { "colStart": 2, "row": 1, "h": 2 },
-            "renderOrder": 4,
+            "horizontalRenderOrder": 4,
             "ttsOrder": 4,
             "chips": [
                 { "value": "long" },
@@ -77,27 +77,12 @@
             ]
         },
         {
-            "key": "link",
-            "label": "Link",
-            "kind": "chips",
-            "grid": { "colStart": 3, "row": 1, "h": 2 },
-            "renderOrder": 5,
-            "ttsOrder": 5,
-            "numeric": { "min": 10, "max": 900, "step": 10 },
-            "chips": [
-                { "value": "→", "audible": "into" },
-                { "value": "&", "audible": "and" },
-                { "value": "<", "audible": "opens" },
-                { "value": ">", "audible": "tightens" }
-            ]
-        },
-        {
             "key": "decorator",
             "label": "Decorators",
             "kind": "chips",
-            "grid": { "colStart": 0, "colEnd": 3, "row": 3, "h": 1 },
-            "renderOrder": 6,
-            "ttsOrder": 6,
+            "grid": { "colStart": 3, "row": 2, "h": 2 },
+            "horizontalRenderOrder": 5,
+            "ttsOrder": 5,
             "repeatable": true,
             "chips": [
                 { "value": "/B", "audible": "Over Brow" },
@@ -120,11 +105,26 @@
             ]
         },
         {
+            "key": "link",
+            "label": "Link",
+            "kind": "chips",
+            "grid": { "colStart": 4, "row": 1, "h": 2 },
+            "horizontalRenderOrder": 6,
+            "ttsOrder": 6,
+            "numeric": { "min": 10, "max": 900, "step": 10 },
+            "chips": [
+                { "value": "→", "audible": "into" },
+                { "value": "&", "audible": "and" },
+                { "value": "<", "audible": "opens" },
+                { "value": ">", "audible": "tightens" }
+            ]
+        },
+        {
             "key": "linkDecorator",
             "label": "Link Decorators",
             "kind": "chips",
-            "grid": { "colStart": 0, "colEnd": 3, "row": 4, "h": 1 },
-            "renderOrder": 7,
+            "grid": { "colStart": 5, "row": 2, "h": 2 },
+            "horizontalRenderOrder": 7,
             "ttsOrder": 7,
             "repeatable": true,
             "chips": [
@@ -142,8 +142,8 @@
             "key": "notes",
             "label": "Notes",
             "kind": "freetext",
-            "grid": { "colStart": 0, "colEnd": 3, "row": 5, "h": 2 },
-            "renderOrder": 8,
+            "grid": { "colStart": 3, "row": 3, "h": 1 },
+            "horizontalRenderOrder": 8,
             "ttsOrder": 8,
             "maxLines": 3
         },
@@ -151,8 +151,8 @@
             "key": "linkNotes",
             "label": "Link Notes",
             "kind": "freetext",
-            "grid": { "colStart": 0, "colEnd": 3, "row": 7, "h": 2 },
-            "renderOrder": 9,
+            "grid": { "colStart": 4, "colEnd": 5, "row": 3, "h": 1 },
+            "horizontalRenderOrder": 9,
             "ttsOrder": 9,
             "maxLines": 2
         }

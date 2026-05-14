@@ -1,5 +1,8 @@
 {
-    "schemaVersion": 2,
-    "promptOrder": ["a"],
-    "fields": []
+    "description": "The top-level field-config object is strict (additionalProperties:false). The only allowed top-level keys are schemaVersion, fields, and extensions. promptOrder was once at top level; it now lives under extensions.<app>.promptOrder, and putting it at the top level is rejected.",
+    "instance": {
+        "schemaVersion": 3,
+        "promptOrder": ["a"],
+        "fields": []
+    }
 }

@@ -67,25 +67,17 @@
                         }
                     }
                 },
-                "scaleW": {
-                    "type": "boolean",
-                    "description": "Hint: render-time scale width to fit content."
-                },
-                "scaleH": {
-                    "type": "boolean",
-                    "description": "Hint: render-time scale height to fit content (e.g. for repeatable freetext)."
-                },
                 "repeatable": {
                     "type": "boolean",
                     "description": "If true, fieldValues[key] is an array of primitives; otherwise a single primitive."
                 },
-                "renderOrder": {
+                "horizontalRenderOrder": {
                     "type": "integer",
-                    "description": "Sequence order when multiple fields share a grid cell (same col/row/w/h). For example, caution + direction + severity stacked in one slot use renderOrder to decide which renders first. Across distinct cells the spatial layout determines order; renderOrder breaks ties within a cell. Lower = earlier."
+                    "description": "Horizontal sequence order when multiple fields share a grid cell (same colStart/row). For example, caution + direction + severity stacked in one slot use horizontalRenderOrder to decide which renders first within the row. Only affects horizontal ordering; vertical placement is driven by row/h. Lower = earlier."
                 },
                 "ttsOrder": {
                     "type": "integer",
-                    "description": "Sequence order in which this field's value(s) are spoken via TTS. Follows the same shared-cell semantics as renderOrder but may diverge if a crew speaks fields in a different order than they read them."
+                    "description": "Sequence order in which this field's value(s) are spoken via TTS. Distinct from the 2D rendered layout — TTS is a 1D reading-order traversal, and ttsOrder is how the crew wants those tokens spoken. Lower = earlier."
                 },
                 "justify": {
                     "type": "string",
@@ -104,24 +96,9 @@
                         "$ref": "#/definitions/chip"
                     }
                 },
-                "min": {
-                    "type": "number",
-                    "description": "kind:'number' only — minimum value."
-                },
-                "max": {
-                    "type": "number",
-                    "description": "kind:'number' only — maximum value."
-                },
-                "step": {
-                    "type": "number",
-                    "description": "kind:'number' only — increment for scrollers / steppers."
-                },
-                "defaultValue": {
-                    "description": "kind:'number' only — initial value when the field is activated."
-                },
                 "numeric": {
                     "type": "object",
-                    "description": "Optional augmentation for kind:'chips' fields — also exposes a numeric scroller alongside the chip grid. The value stored in fieldValues can be either a chip's value (string) or a number, whichever the user picked most recently.",
+                    "description": "Numeric input parameters. For kind:'number' fields, this defines the scroller/stepper range and is the field's only input mode. For kind:'chips' fields it's an optional augmentation that adds a numeric scroller alongside the chip grid; the value stored in fieldValues can then be either a chip's value (string) or a number, whichever the user picked most recently.",
                     "additionalProperties": false,
                     "required": [
                         "min",
@@ -166,10 +143,6 @@
                     "then": {
                         "required": ["chips"],
                         "properties": {
-                            "min": false,
-                            "max": false,
-                            "step": false,
-                            "defaultValue": false,
                             "maxLines": false
                         }
                     }
@@ -180,9 +153,9 @@
                         "properties": { "kind": { "const": "number" } }
                     },
                     "then": {
+                        "required": ["numeric"],
                         "properties": {
                             "chips": false,
-                            "numeric": false,
                             "maxLines": false
                         }
                     }
@@ -195,10 +168,6 @@
                     "then": {
                         "properties": {
                             "chips": false,
-                            "min": false,
-                            "max": false,
-                            "step": false,
-                            "defaultValue": false,
                             "numeric": false
                         }
                     }
@@ -246,7 +215,7 @@
         "schemaVersion": {
             "type": "integer",
             "description": "Version of the field-config schema this document conforms to.",
-            "const": 2
+            "const": 3
         },
         "fields": {
             "type": "array",

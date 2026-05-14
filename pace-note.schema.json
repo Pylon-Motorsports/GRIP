@@ -2,12 +2,20 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/pace-note.schema.json",
     "title": "GripPaceNotes",
-    "description": "A pace-note document covering one note set (one stage, one version). Storage-agnostic: use natural keys (rallyName + rallyDate + stageName + setVersion) for identity across parties; optional UUIDs are provided for implementations that need stable internal IDs. Pacenote field values are stored under each note's `fieldValues` object keyed by the field.key defined in the rally's accompanying field-config (see field-config.schema.json) — different rallies can use entirely different shorthand systems by shipping different field configs.",
+    "description": "A pace-note document covering one note set (one stage, one version). Storage-agnostic: use natural keys (rallyName + rallyDate + stageName + setVersion) for identity across parties; optional UUIDs are provided for implementations that need stable internal IDs. Pacenote field values are stored under each note's `fieldValues` object keyed by the field.key defined in the rally's accompanying field-config (see field-config.schema.json) — different rallies can use entirely different shorthand systems by shipping different field configs. App-specific data lives under namespaced `extensions` objects at the top level and on each contained object (rally, stage, set, paceNote); each app owns its own subtree, keyed by a kebab-case app slug.",
     "type": "object",
     "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. Consumers should pass through unrecognized namespaces unchanged.",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
         "paceNote": {
             "type": "object",
             "description": "A single pace-note call within a set. Position/meta lives at the top level; the actual shorthand values live in fieldValues keyed by the rally's field-config keys.",
+            "additionalProperties": false,
             "required": [
                 "seq"
             ],
@@ -15,7 +23,7 @@
                 "seq": {
                     "type": "integer",
                     "minimum": 0,
-                    "description": "Ordering within the note set."
+                    "description": "Ordering within the note set. Also the canonical display sequence number — consumers that render a sequence column should use this."
                 },
                 "indexOdo": {
                     "type": [
@@ -27,12 +35,6 @@
                 "indexLandmark": {
                     "type": [
                         "string",
-                        "null"
-                    ]
-                },
-                "indexSequence": {
-                    "type": [
-                        "integer",
                         "null"
                     ]
                 },
@@ -56,19 +58,24 @@
                         ]
                     }
                 },
-                "recceAt": {
+                "createdAt": {
                     "type": [
                         "string",
                         "null"
                     ],
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When this note was first captured during the recce drive. Distinct from set.recceDate (the document-level date for the whole recce pass) — per-note timestamps preserve intra-stage capture timing for replay/sync."
                 },
                 "updatedAt": {
                     "type": [
                         "string",
                         "null"
                     ],
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When this note was last modified after initial capture. Null if never edited."
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
                 }
             }
         }
@@ -76,6 +83,7 @@
     "properties": {
         "rally": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "name",
                 "date"
@@ -89,28 +97,26 @@
                     "format": "date",
                     "description": "ISO 8601 date (YYYY-MM-DD)."
                 },
-                "driver": {
+                "crew": {
                     "type": [
                         "string",
                         "null"
-                    ]
-                },
-                "straightAngleDegrees": {
-                    "type": [
-                        "number",
-                        "null"
                     ],
-                    "description": "Dead-zone threshold below which a corner is called 'straight'."
+                    "description": "Free-text identifier for the driving crew (driver / driver + co-driver / team name — producer's choice)."
                 },
                 "id": {
                     "type": "string",
                     "format": "uuid",
                     "description": "Optional stable identifier for implementations that need it. Not required for exchange; natural keys are authoritative."
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
                 }
             }
         },
         "stage": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "name"
             ],
@@ -121,11 +127,15 @@
                 "id": {
                     "type": "string",
                     "format": "uuid"
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
                 }
             }
         },
         "set": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "version"
             ],
@@ -134,22 +144,27 @@
                     "type": "integer",
                     "minimum": 1
                 },
-                "driver": {
+                "crew": {
                     "type": [
                         "string",
                         "null"
-                    ]
+                    ],
+                    "description": "Free-text identifier for the crew on this specific note set (may differ from rally.crew if e.g. a co-driver tested an alternate set)."
                 },
                 "recceDate": {
                     "type": [
                         "string",
                         "null"
                     ],
-                    "format": "date"
+                    "format": "date",
+                    "description": "Date the recce pass was made. ISO 8601 date (YYYY-MM-DD). Per-note timing lives on each paceNote's createdAt."
                 },
                 "id": {
                     "type": "string",
                     "format": "uuid"
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
                 }
             }
         },
@@ -164,8 +179,12 @@
             "items": {
                 "$ref": "#/definitions/paceNote"
             }
+        },
+        "extensions": {
+            "$ref": "#/definitions/extensions"
         }
     },
+    "additionalProperties": false,
     "required": [
         "rally",
         "stage",

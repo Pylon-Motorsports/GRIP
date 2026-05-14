@@ -1,19 +1,19 @@
 {
     "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
     "stage": { "name": "SS1" },
-    "set":   { "version": 1, "driver": "A. Mouton", "recceDate": "2025-08-11" },
+    "set":   { "version": 1, "crew": "F. Drury", "recceDate": "2025-08-11" },
     "fieldConfig": {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "fields": [
             {
                 "key": "caution",
                 "label": "Caution",
                 "kind": "chips",
                 "grid": { "colStart": 0, "row": 1, "h": 2 },
-                "renderOrder": 0,
-                "ttsOrder": 0,
+                "horizontalRenderOrder": 1,
+                "ttsOrder": 1,
                 "chips": [
-                    { "value": "!",  "audible": "Caution" },
+                    { "value": "!", "audible": "Caution" },
                     { "value": "!!", "audible": "Double Caution" }
                 ]
             },
@@ -22,8 +22,8 @@
                 "label": "Direction",
                 "kind": "chips",
                 "grid": { "colStart": 1, "row": 1, "h": 2 },
-                "renderOrder": 1,
-                "ttsOrder": 1,
+                "horizontalRenderOrder": 2,
+                "ttsOrder": 2,
                 "chips": [
                     { "value": "L", "audible": "Left" },
                     { "value": "R", "audible": "Right" }
@@ -34,8 +34,8 @@
                 "label": "Severity",
                 "kind": "chips",
                 "grid": { "colStart": 1, "row": 1, "h": 2 },
-                "renderOrder": 2,
-                "ttsOrder": 2,
+                "horizontalRenderOrder": 3,
+                "ttsOrder": 3,
                 "chips": [
                     { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12 } } }
                 ]
@@ -45,8 +45,8 @@
                 "label": "Duration",
                 "kind": "chips",
                 "grid": { "colStart": 2, "row": 1, "h": 2 },
-                "renderOrder": 3,
-                "ttsOrder": 3,
+                "horizontalRenderOrder": 4,
+                "ttsOrder": 4,
                 "chips": [
                     { "value": "long" },
                     { "value": "short" }
@@ -56,9 +56,9 @@
                 "key": "link",
                 "label": "Link",
                 "kind": "chips",
-                "grid": { "colStart": 3, "row": 1, "h": 2 },
-                "renderOrder": 4,
-                "ttsOrder": 4,
+                "grid": { "colStart": 4, "row": 1, "h": 2 },
+                "horizontalRenderOrder": 6,
+                "ttsOrder": 6,
                 "numeric": { "min": 10, "max": 900, "step": 10 },
                 "chips": [
                     { "value": ">", "audible": "tightens" }
@@ -76,7 +76,8 @@
                 "duration": "long",
                 "link": ">"
             },
-            "recceAt": "2025-08-11T15:30:00Z"
+            "createdAt": "2025-08-11T15:30:00Z",
+            "updatedAt": null
         },
         {
             "seq": 13,
@@ -85,7 +86,8 @@
                 "caution": "!!",
                 "link": 100
             },
-            "recceAt": "2025-08-11T15:30:00Z"
+            "createdAt": "2025-08-11T15:30:15Z",
+            "updatedAt": "2025-08-11T15:45:32Z"
         }
     ]
 }

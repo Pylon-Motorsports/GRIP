@@ -7,7 +7,7 @@ GRIP is storage-agnostic. Documents are identified by natural keys (rally name +
 ## Schemas
 
 ### `field-config.schema.json`
-The per-rally definition of which pace-note fields exist. Each field carries a unique `key`, a `kind` (`chips` | `freetext` | `number`), grid placement (`colStart` / optional `colEnd` / `row` / `h`), render/TTS order, and — for chips-kind fields — an inline vocabulary of allowed values with their audibles and rendering hints. Different rallies can ship entirely different shorthand systems by shipping different field configs.
+The per-rally definition of which pace-note fields exist. Each field carries a unique `key`, a `kind` (`chips` | `freetext` | `number`), grid placement (`colStart` / optional `colEnd` / `row` / `h`), `horizontalRenderOrder` and `ttsOrder` for sequencing, and — for chips-kind fields — an inline vocabulary of allowed values with their audibles and rendering hints. Different rallies can ship entirely different shorthand systems by shipping different field configs.
 
 Columns are alignment **lanes**, not pixel positions: fields sharing the same `colStart` align vertically across rows; lane widths scale to content. Multi-lane spans are expressed inclusively via `colEnd`. Rows and `h` are spatial — renderers should preserve them.
 
@@ -50,26 +50,4 @@ Add a new negative case by dropping a JSON file under `tests/invalid/<schema-nam
 
 ## Sample: stage geometry
 
-```json
-{
-  "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
-  "stage": { "name": "SS1" },
-  "segments": [
-    {
-      "seq": 0,
-      "centerLineLengthMeters": 0,
-      "horizontalAngleDeltaDegrees": 0,
-      "leftSurfaces":  [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
-      "rightSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }]
-    },
-    {
-      "seq": 1,
-      "centerLineLengthMeters": 120,
-      "horizontalAngleDeltaDegrees": -8,
-      "leftSurfaces":  [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
-      "rightSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
-      "rightLiners":   [{ "feature": "trees", "distanceFromRoadCenterCentimeters": 400, "widthCentimeters": 500, "heightCentimeters": 1500 }]
-    }
-  ]
-}
-```
+A minimal stage-geometry document with two segments lives at [`samples/stage-geometry.sample.json`](samples/stage-geometry.sample.json). Validated by the same harness as the pace-note sample.

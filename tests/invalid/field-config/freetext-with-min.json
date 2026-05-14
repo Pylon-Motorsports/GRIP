@@ -1,11 +1,14 @@
 {
-    "schemaVersion": 2,
-    "fields": [
-        {
-            "key": "notes",
-            "kind": "freetext",
-            "grid": { "colStart": 0, "row": 0, "h": 1 },
-            "min": 0
-        }
-    ]
+    "description": "min is not a field-level property anymore (it lives inside the numeric object). Under additionalProperties:false at the field level, declaring min directly on a field is rejected as an unknown property.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "notes",
+                "kind": "freetext",
+                "grid": { "colStart": 0, "row": 0, "h": 1 },
+                "min": 0
+            }
+        ]
+    }
 }

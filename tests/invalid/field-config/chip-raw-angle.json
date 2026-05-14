@@ -1,13 +1,16 @@
 {
-    "schemaVersion": 2,
-    "fields": [
-        {
-            "key": "severity",
-            "kind": "chips",
-            "grid": { "colStart": 0, "row": 0, "h": 1 },
-            "chips": [
-                { "value": "6", "angle": 12 }
-            ]
-        }
-    ]
+    "description": "Each chip is strict (additionalProperties:false). The schema-defined chip properties are value, audible, textFormat, and extensions. The compass-dial `angle` is app-specific and must live under extensions.<app>.angle — declaring it directly on the chip is rejected.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "severity",
+                "kind": "chips",
+                "grid": { "colStart": 0, "row": 0, "h": 1 },
+                "chips": [
+                    { "value": "6", "angle": 12 }
+                ]
+            }
+        ]
+    }
 }

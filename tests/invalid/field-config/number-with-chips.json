@@ -1,11 +1,15 @@
 {
-    "schemaVersion": 2,
-    "fields": [
-        {
-            "key": "distance",
-            "kind": "number",
-            "grid": { "colStart": 0, "row": 0, "h": 1 },
-            "chips": [{ "value": "1" }]
-        }
-    ]
+    "description": "A number-kind field cannot also declare a chips[] vocabulary. The if/then rule for kind:'number' forbids the chips property (sets it to a `false` schema).",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "distance",
+                "kind": "number",
+                "grid": { "colStart": 0, "row": 0, "h": 1 },
+                "numeric": { "min": 0, "max": 100, "step": 1 },
+                "chips": [{ "value": "1" }]
+            }
+        ]
+    }
 }

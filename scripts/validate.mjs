@@ -75,6 +75,9 @@ test('pace-note sample.fieldConfig validates as field-config', () => {
     const doc = loadJson('samples/pace-note.sample.json');
     assertValid(validators['field-config'], doc.fieldConfig);
 });
+test('stage-geometry sample validates as stage-geometry', () => {
+    assertValid(validators['stage-geometry'], loadJson('samples/stage-geometry.sample.json'));
+});
 
 console.log('\ncross-checks: producer/consumer contract');
 test('pace-note sample has no orphan fieldValues keys', () => {
@@ -87,6 +90,7 @@ test('pace-note sample has no orphan fieldValues keys', () => {
 });
 
 console.log('\nnegative: tests/invalid/<schema>/*.json should all fail');
+console.log('  (each fixture is { description, instance }; description is printed alongside the test name)');
 const invalidRoot = join(ROOT, 'tests', 'invalid');
 if (existsSync(invalidRoot)) {
     for (const schemaName of readdirSync(invalidRoot)) {
@@ -99,7 +103,15 @@ if (existsSync(invalidRoot)) {
         }
         for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
             const fixture = JSON.parse(readFileSync(join(dir, file), 'utf-8'));
-            test(`${schemaName}/${file}`, () => assertInvalid(validate, fixture));
+            const { description, instance } = fixture;
+            if (!instance) {
+                test(`${schemaName}/${file}`, () => {
+                    throw new Error('fixture is missing `instance` — wrap fixtures as { description, instance }');
+                });
+                continue;
+            }
+            const label = description ? `${schemaName}/${file} — ${description}` : `${schemaName}/${file}`;
+            test(label, () => assertInvalid(validate, instance));
         }
     }
 }

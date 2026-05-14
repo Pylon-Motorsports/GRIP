@@ -1,0 +1,13 @@
+{
+    "description": "A number-kind field must declare a numeric block (with min/max/step). min/max/step were consolidated under `numeric` (where they used to live both at field level for kind:'number' and inside `numeric` for chips augmentation). The if/then rule for kind:'number' now requires `numeric`.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "distance",
+                "kind": "number",
+                "grid": { "colStart": 0, "row": 0, "h": 1 }
+            }
+        ]
+    }
+}

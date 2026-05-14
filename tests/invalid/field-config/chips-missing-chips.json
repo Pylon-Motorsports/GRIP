@@ -1,10 +1,13 @@
 {
-    "schemaVersion": 2,
-    "fields": [
-        {
-            "key": "noChips",
-            "kind": "chips",
-            "grid": { "colStart": 0, "row": 0, "h": 1 }
-        }
-    ]
+    "description": "A chips-kind field must declare a chips[] vocabulary. The if/then rule for kind:'chips' adds chips to the required list, so omitting it fails validation.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "noChips",
+                "kind": "chips",
+                "grid": { "colStart": 0, "row": 0, "h": 1 }
+            }
+        ]
+    }
 }
