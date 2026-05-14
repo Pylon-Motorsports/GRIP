@@ -3,7 +3,7 @@
     "stage": { "name": "SS1" },
     "set":   { "version": 1, "driver": "A. Mouton", "recceDate": "2025-08-11" },
     "fieldConfig": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "fields": [
             {
                 "key": "caution",

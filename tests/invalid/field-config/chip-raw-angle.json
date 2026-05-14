@@ -1,0 +1,13 @@
+{
+    "schemaVersion": 2,
+    "fields": [
+        {
+            "key": "severity",
+            "kind": "chips",
+            "grid": { "colStart": 0, "row": 0, "h": 1 },
+            "chips": [
+                { "value": "6", "angle": 12 }
+            ]
+        }
+    ]
+}

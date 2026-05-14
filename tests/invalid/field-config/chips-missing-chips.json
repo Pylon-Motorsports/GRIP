@@ -1,0 +1,10 @@
+{
+    "schemaVersion": 2,
+    "fields": [
+        {
+            "key": "noChips",
+            "kind": "chips",
+            "grid": { "colStart": 0, "row": 0, "h": 1 }
+        }
+    ]
+}

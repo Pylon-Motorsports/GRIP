@@ -246,7 +246,7 @@
         "schemaVersion": {
             "type": "integer",
             "description": "Version of the field-config schema this document conforms to.",
-            "const": 1
+            "const": 2
         },
         "fields": {
             "type": "array",

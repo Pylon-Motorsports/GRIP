@@ -35,6 +35,19 @@ A starter field-config that reproduces the historical eight-column pace-note voc
 
 A minimal pace-note document with an inlined `fieldConfig` and two notes lives at [`samples/pace-note.sample.json`](samples/pace-note.sample.json). For the full historical vocabulary, see the classic-rally preset above.
 
+## Development
+
+Validate the schemas, presets, and samples locally:
+
+```bash
+npm install
+npm test
+```
+
+The harness validates each preset/sample against its schema, cross-checks that `notes[].fieldValues` keys are all declared in the inlined `fieldConfig`, and asserts that every fixture under `tests/invalid/<schema>/` correctly fails validation. CI runs the same suite on every push and pull request via [`.github/workflows/validate.yml`](.github/workflows/validate.yml).
+
+Add a new negative case by dropping a JSON file under `tests/invalid/<schema-name>/` — no script changes required.
+
 ## Sample: stage geometry
 
 ```json

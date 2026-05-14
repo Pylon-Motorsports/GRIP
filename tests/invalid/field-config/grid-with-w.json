@@ -1,0 +1,11 @@
+{
+    "schemaVersion": 2,
+    "fields": [
+        {
+            "key": "a",
+            "kind": "chips",
+            "grid": { "colStart": 0, "row": 0, "h": 1, "w": 2 },
+            "chips": [{ "value": "x" }]
+        }
+    ]
+}

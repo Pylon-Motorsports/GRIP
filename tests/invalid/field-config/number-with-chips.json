@@ -1,0 +1,11 @@
+{
+    "schemaVersion": 2,
+    "fields": [
+        {
+            "key": "distance",
+            "kind": "number",
+            "grid": { "colStart": 0, "row": 0, "h": 1 },
+            "chips": [{ "value": "1" }]
+        }
+    ]
+}
