@@ -4,7 +4,24 @@
     "set":   { "version": 1, "crew": "F. Drury", "recceDate": "2025-08-11" },
     "fieldConfig": {
         "schemaVersion": 3,
+        "extensions": {
+            "grip-note": {
+                "promptOrder": ["direction", "severity", "link"]
+            }
+        },
         "fields": [
+            {
+                "key": "prefix",
+                "label": "Prefix",
+                "kind": "chips",
+                "grid": { "colStart": 1, "row": 0, "h": 1 },
+                "horizontalRenderOrder": 0,
+                "ttsOrder": 0,
+                "chips": [
+                    { "value": "EARLY" },
+                    { "value": "LATE" }
+                ]
+            },
             {
                 "key": "caution",
                 "label": "Caution",
@@ -14,7 +31,9 @@
                 "ttsOrder": 1,
                 "chips": [
                     { "value": "!", "audible": "Caution" },
-                    { "value": "!!", "audible": "Double Caution" }
+                    { "value": "!!", "audible": "Double Caution" },
+                    { "value": "!!!", "audible": "Triple Caution" },
+                    { "value": "©", "audible": "Care" }
                 ]
             },
             {
@@ -26,7 +45,10 @@
                 "ttsOrder": 2,
                 "chips": [
                     { "value": "L", "audible": "Left" },
-                    { "value": "R", "audible": "Right" }
+                    { "value": "R", "audible": "Right" },
+                    { "value": "KL", "audible": "Keep Left" },
+                    { "value": "KM", "audible": "Keep Mid" },
+                    { "value": "KR", "audible": "Keep Right" }
                 ]
             },
             {
@@ -37,7 +59,12 @@
                 "horizontalRenderOrder": 3,
                 "ttsOrder": 3,
                 "chips": [
-                    { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12 } } }
+                    { "value": "1", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 102 } } },
+                    { "value": "2", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 84  } } },
+                    { "value": "3", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 66  } } },
+                    { "value": "4", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 48  } } },
+                    { "value": "5", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 30  } } },
+                    { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12  } } }
                 ]
             },
             {
@@ -49,7 +76,36 @@
                 "ttsOrder": 4,
                 "chips": [
                     { "value": "long" },
-                    { "value": "short" }
+                    { "value": "short" },
+                    { "value": "XL", "audible": "extra long" }
+                ]
+            },
+            {
+                "key": "decorator",
+                "label": "Decorators",
+                "kind": "chips",
+                "grid": { "colStart": 3, "row": 2, "h": 2 },
+                "horizontalRenderOrder": 5,
+                "ttsOrder": 5,
+                "repeatable": true,
+                "chips": [
+                    { "value": "/B", "audible": "Over Brow" },
+                    { "value": "/C", "audible": "Over Crest" },
+                    { "value": "/J", "audible": "Over Jump" },
+                    { "value": "/][", "audible": "Over Bridge" },
+                    { "value": "Cut" },
+                    { "value": "Don't" },
+                    { "value": "Keep In" },
+                    { "value": "Keep Out" },
+                    { "value": "/\\", "audible": "Narrows" },
+                    { "value": "\\/", "audible": "Widens" },
+                    { "value": "Slippy" },
+                    { "value": "Splash" },
+                    { "value": "Bumps" },
+                    { "value": "↑", "audible": "Up" },
+                    { "value": "↓", "audible": "Down" },
+                    { "value": "OC", "audible": "Off Camber" },
+                    { "value": "?", "audible": "Maybe" }
                 ]
             },
             {
@@ -61,8 +117,48 @@
                 "ttsOrder": 6,
                 "numeric": { "min": 10, "max": 900, "step": 10 },
                 "chips": [
+                    { "value": "→", "audible": "into" },
+                    { "value": "&", "audible": "and" },
+                    { "value": "<", "audible": "opens" },
                     { "value": ">", "audible": "tightens" }
                 ]
+            },
+            {
+                "key": "linkDecorator",
+                "label": "Link Decorators",
+                "kind": "chips",
+                "grid": { "colStart": 5, "row": 2, "h": 2 },
+                "horizontalRenderOrder": 7,
+                "ttsOrder": 7,
+                "repeatable": true,
+                "chips": [
+                    { "value": "/\\", "audible": "Narrows" },
+                    { "value": "\\/", "audible": "Widens" },
+                    { "value": "Slippy" },
+                    { "value": "Splash" },
+                    { "value": "Bumps" },
+                    { "value": "↑", "audible": "Up" },
+                    { "value": "↓", "audible": "Down" },
+                    { "value": "?", "audible": "Maybe" }
+                ]
+            },
+            {
+                "key": "notes",
+                "label": "Notes",
+                "kind": "freetext",
+                "grid": { "colStart": 3, "row": 3, "h": 1 },
+                "horizontalRenderOrder": 8,
+                "ttsOrder": 8,
+                "maxLines": 3
+            },
+            {
+                "key": "linkNotes",
+                "label": "Link Notes",
+                "kind": "freetext",
+                "grid": { "colStart": 4, "colEnd": 5, "row": 3, "h": 1 },
+                "horizontalRenderOrder": 9,
+                "ttsOrder": 9,
+                "maxLines": 2
             }
         ]
     },
@@ -74,6 +170,7 @@
                 "direction": "L",
                 "severity": "6",
                 "duration": "long",
+                "decorator": ["Keep In"],
                 "link": ">"
             },
             "createdAt": "2025-08-11T15:30:00Z",
