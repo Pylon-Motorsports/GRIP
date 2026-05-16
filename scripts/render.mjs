@@ -95,26 +95,103 @@ function computeCellWidth(fields, maxCol, maxRow, note) {
     return Math.max(widest + 2, 6);
 }
 
-function renderBox(fields, maxCol, maxRow, cellW, note) {
-    const hr = '─'.repeat(cellW);
-    const top = '┌' + Array(maxCol + 1).fill(hr).join('┬') + '┐';
-    const mid = '├' + Array(maxCol + 1).fill(hr).join('┼') + '┤';
-    const bot = '└' + Array(maxCol + 1).fill(hr).join('┴') + '┘';
-
-    const lines = [top];
+function buildRowSpans(fields, maxRow) {
+    // Per row: spanStart maps colStart→colEnd, spanInside is the set of
+    // columns that sit inside (but not at the origin of) a column span.
+    const spanStart = [];
+    const spanInside = [];
     for (let r = 0; r <= maxRow; r++) {
-        const valLine = [];
-        const lblLine = [];
-        for (let c = 0; c <= maxCol; c++) {
-            const here = fieldsAtOrigin(fields, c, r);
-            const val = here.length && note ? valuesFor(here, note) : '';
-            const lbl = here.length ? labelFor(here) : '';
-            valLine.push(center(val, cellW));
-            lblLine.push(center(lbl, cellW));
+        const starts = new Map();
+        const inside = new Set();
+        for (const f of fields) {
+            if (f.grid.row !== r) continue;
+            const cs = f.grid.colStart;
+            const ce = f.grid.colEnd ?? cs;
+            if (ce <= cs) continue;
+            starts.set(cs, Math.max(starts.get(cs) ?? cs, ce));
+            for (let x = cs + 1; x <= ce; x++) inside.add(x);
         }
-        lines.push('│' + valLine.join('│') + '│');
-        lines.push('│' + lblLine.join('│') + '│');
-        lines.push(r < maxRow ? mid : bot);
+        spanStart.push(starts);
+        spanInside.push(inside);
+    }
+    return { spanStart, spanInside };
+}
+
+function wallInRow(spans, r, x, maxCol) {
+    if (x === 0 || x === maxCol + 1) return true;
+    return !spans.spanInside[r].has(x);
+}
+
+function pickConnector(a, b) {
+    // Interior separator connector based on wall presence above/below.
+    // a or b may be null when on the top or bottom edge respectively.
+    if (a == null) return b ? '┬' : '─';
+    if (b == null) return a ? '┴' : '─';
+    if (a && b) return '┼';
+    if (a) return '┴';
+    if (b) return '┬';
+    return '─';
+}
+
+function pickEdgeChar(side, a, b) {
+    if (side === 'left') {
+        if (a == null) return '┌';
+        if (b == null) return '└';
+        return '├';
+    }
+    if (a == null) return '┐';
+    if (b == null) return '┘';
+    return '┤';
+}
+
+function sepLine(spans, rowAbove, rowBelow, maxCol, cellW) {
+    let s = '';
+    for (let x = 0; x <= maxCol + 1; x++) {
+        const a = rowAbove == null ? null : wallInRow(spans, rowAbove, x, maxCol);
+        const b = rowBelow == null ? null : wallInRow(spans, rowBelow, x, maxCol);
+        if (x === 0) s += pickEdgeChar('left', a, b);
+        else if (x === maxCol + 1) s += pickEdgeChar('right', a, b);
+        else s += pickConnector(a, b);
+        if (x <= maxCol) s += '─'.repeat(cellW);
+    }
+    return s;
+}
+
+function contentLine(fields, spans, r, maxCol, cellW, textFn) {
+    let s = '│';
+    let c = 0;
+    while (c <= maxCol) {
+        if (spans.spanInside[r].has(c)) {
+            c++;
+            continue;
+        }
+        const ce = spans.spanStart[r].get(c) ?? c;
+        const span = ce - c + 1;
+        const width = span * cellW + (span - 1); // suppressed walls become content space
+        const here = fieldsAtOrigin(fields, c, r);
+        s += center(textFn(here), width);
+        c = ce + 1;
+        s += nextWallChar(spans, r, c, maxCol);
+    }
+    return s;
+}
+
+function nextWallChar(spans, r, c, maxCol) {
+    if (c > maxCol) return '│';
+    return wallInRow(spans, r, c, maxCol) ? '│' : ' ';
+}
+
+function renderBox(fields, maxCol, maxRow, cellW, note) {
+    const spans = buildRowSpans(fields, maxRow);
+    const valueFn = (here) => (here.length && note ? valuesFor(here, note) : '');
+    const labelFn = (here) => (here.length ? labelFor(here) : '');
+    const lines = [sepLine(spans, null, 0, maxCol, cellW)];
+    for (let r = 0; r <= maxRow; r++) {
+        lines.push(
+            contentLine(fields, spans, r, maxCol, cellW, valueFn),
+            contentLine(fields, spans, r, maxCol, cellW, labelFn),
+            sepLine(spans, r, r < maxRow ? r + 1 : null, maxCol, cellW),
+        );
     }
     return lines.join('\n') + '\n';
 }
@@ -123,9 +200,9 @@ function renderBox(fields, maxCol, maxRow, cellW, note) {
 
 function htmlEscape(s) {
     return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
 }
 
 function formatValueHtml(value, field) {
