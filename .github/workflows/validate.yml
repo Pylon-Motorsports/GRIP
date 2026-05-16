@@ -5,6 +5,12 @@ on:
     branches: [main, develop]
   pull_request:
 
+# Opt the JavaScript-action runtime (checkout, setup-node, etc.) into Node 24
+# ahead of GitHub forcing it on 2026-06-02. Unrelated to the Node version we
+# install for our own scripts below — that's pinned via setup-node.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -12,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - run: npm ci
       - run: npm test
       - name: Render samples to step summary
