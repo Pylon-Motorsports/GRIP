@@ -24,7 +24,7 @@
             "key": "prefix",
             "label": "Prefix",
             "kind": "chips",
-            "grid": { "colStart": 1, "row": 0, "h": 1 },
+            "grid": { "colStart": 1, "colEnd": 2, "row": 0, "h": 1 },
             "horizontalRenderOrder": 0,
             "ttsOrder": 0,
             "chips": [
@@ -142,7 +142,7 @@
             "key": "notes",
             "label": "Notes",
             "kind": "freetext",
-            "grid": { "colStart": 3, "row": 3, "h": 1 },
+            "grid": { "colStart": 3, "row": 4, "h": 1 },
             "horizontalRenderOrder": 8,
             "ttsOrder": 8,
             "maxLines": 3
@@ -151,7 +151,7 @@
             "key": "linkNotes",
             "label": "Link Notes",
             "kind": "freetext",
-            "grid": { "colStart": 4, "colEnd": 5, "row": 3, "h": 1 },
+            "grid": { "colStart": 4, "colEnd": 5, "row": 4, "h": 1 },
             "horizontalRenderOrder": 9,
             "ttsOrder": 9,
             "maxLines": 2
