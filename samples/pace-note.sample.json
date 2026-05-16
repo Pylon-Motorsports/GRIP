@@ -11,18 +11,6 @@
         },
         "fields": [
             {
-                "key": "prefix",
-                "label": "Prefix",
-                "kind": "chips",
-                "grid": { "colStart": 1, "row": 0, "h": 1 },
-                "horizontalRenderOrder": 0,
-                "ttsOrder": 0,
-                "chips": [
-                    { "value": "EARLY" },
-                    { "value": "LATE" }
-                ]
-            },
-            {
                 "key": "caution",
                 "label": "Caution",
                 "kind": "chips",
@@ -34,6 +22,18 @@
                     { "value": "!!", "audible": "Double Caution" },
                     { "value": "!!!", "audible": "Triple Caution" },
                     { "value": "©", "audible": "Care" }
+                ]
+            },
+            {
+                "key": "prefix",
+                "label": "Prefix",
+                "kind": "chips",
+                "grid": { "colStart": 1, "row": 0, "h": 1 },
+                "horizontalRenderOrder": 0,
+                "ttsOrder": 0,
+                "chips": [
+                    { "value": "EARLY" },
+                    { "value": "LATE" }
                 ]
             },
             {
@@ -75,8 +75,8 @@
                 "horizontalRenderOrder": 4,
                 "ttsOrder": 4,
                 "chips": [
-                    { "value": "long" },
                     { "value": "short" },
+                    { "value": "long" },
                     { "value": "XL", "audible": "extra long" }
                 ]
             },
@@ -117,7 +117,7 @@
                 "ttsOrder": 6,
                 "numeric": { "min": 10, "max": 900, "step": 10 },
                 "chips": [
-                    { "value": "→", "audible": "into" },
+                    { "value": "→", "audible": "in-to" },
                     { "value": "&", "audible": "and" },
                     { "value": "<", "audible": "opens" },
                     { "value": ">", "audible": "tightens" }
