@@ -48,6 +48,8 @@ The harness validates each preset/sample against its schema, cross-checks that `
 
 Add a new negative case by dropping a JSON file under `tests/invalid/<schema-name>/` — no script changes required.
 
+`npm run render` produces a markdown grid-map view of each pace-note sample (one table per note, values placed at their `colStart` / `row` origin in the alignment-lane grid). In CI, the rendered output is piped to `$GITHUB_STEP_SUMMARY` so reviewers can see the shorthand layout directly on the run's page without checking anything out.
+
 ## Sample: stage geometry
 
 A minimal stage-geometry document with two segments lives at [`samples/stage-geometry.sample.json`](samples/stage-geometry.sample.json). Validated by the same harness as the pace-note sample.

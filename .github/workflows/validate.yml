@@ -15,3 +15,6 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm test
+      - name: Render samples to step summary
+        if: always()
+        run: npm run --silent render >> "$GITHUB_STEP_SUMMARY"

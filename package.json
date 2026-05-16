@@ -5,7 +5,8 @@
     "type": "module",
     "description": "GRIP — Generic Rally Information Protocol. JSON Schema definitions and validation harness.",
     "scripts": {
-        "test": "node scripts/validate.mjs"
+        "test": "node scripts/validate.mjs",
+        "render": "node scripts/render.mjs"
     },
     "devDependencies": {
         "ajv": "^6.12.6"
