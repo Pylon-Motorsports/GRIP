@@ -184,6 +184,13 @@
                     ],
                     "description": "Signed heading change over the segment (positive = left, negative = right)."
                 },
+                "verticalAngleDeltaDegrees": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "description": "Signed pitch change over the segment (positive = climbing, negative = descending). Defined identically to horizontalAngleDeltaDegrees, just on the vertical axis — a crest is a positive-then-negative pair of segments, a dip is the reverse."
+                },
                 "leftSurfaces": {
                     "type": "array",
                     "items": {

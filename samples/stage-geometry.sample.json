@@ -13,6 +13,7 @@
             "seq": 1,
             "centerLineLengthMeters": 120,
             "horizontalAngleDeltaDegrees": -8,
+            "verticalAngleDeltaDegrees": 3,
             "leftSurfaces":  [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
             "rightSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
             "rightLiners":   [{ "feature": "trees", "distanceFromRoadCenterCentimeters": 400, "widthCentimeters": 500, "heightCentimeters": 1500 }]

@@ -22,7 +22,7 @@ A pace-note document covers one note set: a single stage, at a specific version.
 - Consumers should treat unknown field keys as informational and skip them gracefully, to preserve forward compatibility as field-configs evolve.
 
 ### `stage-geometry.schema.json`
-A stage-geometry document describes a stage as an ordered list of segments. Each segment carries the length, heading change, and surface/roadside shape for the **end** of the segment. The first segment should be length zero and is used to initialize the starting shape.
+A stage-geometry document describes a stage as an ordered list of segments. Each segment carries the length, signed heading change, signed pitch change, and surface/roadside shape for the **end** of the segment. The first segment should be length zero and is used to initialize the starting shape. Heading and pitch use the same convention: a signed angle delta over the segment, with sign indicating direction (`+` heading = left, `+` pitch = climbing). A crest is a positive-then-negative pair of pitch deltas; a dip is the reverse.
 
 For surfaces with an overlay (sand, snow, water): `depthCentimeters = 0` means packed/dry underneath; a positive value is the depth of the loose material or water on top.
 
