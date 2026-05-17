@@ -1,0 +1,90 @@
+{
+    "schemaVersion": 1,
+    "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+    "stage": { "name": "SS1" },
+    "segments": [
+        {
+            "seq": 0,
+            "centerLineLengthMeters": 0,
+            "horizontalAngleDeltaDegrees": 0,
+            "leftSurfaces": [
+                { "surface": "gravel_compact", "widthCentimeters": 150 },
+                { "surface": "grass", "widthCentimeters": 200 }
+            ],
+            "rightSurfaces": [
+                { "surface": "gravel_compact", "widthCentimeters": 150 },
+                { "surface": "grass", "widthCentimeters": 200 }
+            ],
+            "leftFeatures": [
+                {
+                    "feature": "tc_start_sign",
+                    "distanceFromRoadCenterCentimeters": 250,
+                    "distanceAlongRoadCentimeters": 0,
+                    "widthCentimeters": 60,
+                    "heightCentimeters": 180
+                }
+            ]
+        },
+        {
+            "seq": 1,
+            "centerLineLengthMeters": 120,
+            "horizontalAngleDeltaDegrees": -8,
+            "verticalAngleDeltaDegrees": 3,
+            "leftSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
+            "rightSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
+            "rightLiners": [
+                {
+                    "feature": "trees",
+                    "distanceFromRoadCenterCentimeters": 400,
+                    "widthCentimeters": 500,
+                    "heightCentimeters": 1500
+                }
+            ]
+        },
+        {
+            "seq": 2,
+            "centerLineLengthMeters": 80,
+            "horizontalAngleDeltaDegrees": 12,
+            "verticalAngleDeltaDegrees": -2,
+            "leftSurfaces": [
+                { "surface": "gravel_loose", "widthCentimeters": 100, "depthCentimeters": 5 }
+            ],
+            "rightSurfaces": [{ "surface": "gravel_compact", "widthCentimeters": 150 }],
+            "leftLiners": [
+                {
+                    "feature": "guard_rail",
+                    "distanceFromRoadCenterCentimeters": 200,
+                    "widthCentimeters": 20,
+                    "heightCentimeters": 80
+                }
+            ],
+            "rightFeatures": [
+                {
+                    "feature": "boulder",
+                    "distanceFromRoadCenterCentimeters": 350,
+                    "distanceAlongRoadCentimeters": 40,
+                    "widthCentimeters": 120,
+                    "heightCentimeters": 80
+                }
+            ]
+        },
+        {
+            "seq": 3,
+            "centerLineLengthMeters": 50,
+            "horizontalAngleDeltaDegrees": 0,
+            "verticalAngleDeltaDegrees": -5,
+            "leftSurfaces": [
+                { "surface": "water", "widthCentimeters": 300, "depthCentimeters": 8 }
+            ],
+            "rightSurfaces": [{ "surface": "wood", "widthCentimeters": 200 }],
+            "rightLiners": [
+                {
+                    "feature": "bridge",
+                    "distanceFromRoadCenterCentimeters": 100,
+                    "widthCentimeters": 30,
+                    "heightCentimeters": 120
+                }
+            ]
+        }
+    ]
+}

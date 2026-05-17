@@ -1,0 +1,21 @@
+{
+    "description": "surfaceStrip is strict (additionalProperties:false). App-specific per-strip data (e.g. a sim's surface friction coefficient) must live under surfaceStrip.extensions.<app>, not as a sibling property.",
+    "instance": {
+        "schemaVersion": 1,
+        "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+        "stage": { "name": "SS1" },
+        "segments": [
+            {
+                "seq": 0,
+                "centerLineLengthMeters": 0,
+                "leftSurfaces": [
+                    {
+                        "surface": "gravel_compact",
+                        "widthCentimeters": 150,
+                        "frictionCoefficient": 0.7
+                    }
+                ]
+            }
+        ]
+    }
+}

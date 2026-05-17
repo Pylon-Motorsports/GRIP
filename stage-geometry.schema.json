@@ -1,0 +1,272 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/stage-geometry.schema.json",
+    "title": "GripStageGeometry",
+    "description": "Geometric description of a rally stage as an ordered list of segments. Each segment describes the road surface and shape for the END of that segment; the first segment should be length zero and is used to initialize the starting shape. Storage-agnostic: natural keys (rallyName + rallyDate + stageName) identify stages across parties. App-specific data lives under namespaced `extensions` objects at the top level and on each contained object (rally, stage, segment, surfaceStrip, roadsideLiner, roadsideFeature); each app owns its own subtree, keyed by a kebab-case app slug.",
+    "type": "object",
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. Consumers should pass through unrecognized namespaces unchanged.",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "surfaceEnum": {
+            "type": "string",
+            "enum": [
+                "tarmac_smooth",
+                "tarmac_shiny",
+                "tarmac_dirty",
+                "tarmac_bumpy",
+                "gravel_loose",
+                "gravel_compact",
+                "gravel_marbles",
+                "gravel_dusty",
+                "sand",
+                "snow",
+                "ice_packed",
+                "ice_clear",
+                "ice_snow_covered",
+                "rock",
+                "grass",
+                "water",
+                "steel",
+                "wood"
+            ]
+        },
+        "surfaceStrip": {
+            "type": "object",
+            "description": "One lateral strip of surface next to the road. Strips are listed from the road centre outwards.",
+            "additionalProperties": false,
+            "properties": {
+                "surface": {
+                    "$ref": "#/definitions/surfaceEnum"
+                },
+                "widthCentimeters": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "angleDeltaDegrees": {
+                    "type": ["integer", "null"],
+                    "description": "Lateral slope relative to the adjacent inner strip (positive = rising away from road centre)."
+                },
+                "depthCentimeters": {
+                    "type": ["integer", "null"],
+                    "minimum": 0,
+                    "description": "For surfaces with overlay (sand, snow, water): 0 indicates packed/dry underneath, a positive value is the depth of the loose material or water on top."
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": ["surface", "widthCentimeters"]
+        },
+        "roadsideLinerEnum": {
+            "type": "string",
+            "enum": ["guard_rail", "trees", "wall", "fence", "bridge"]
+        },
+        "roadsideLiner": {
+            "type": "object",
+            "description": "A continuous roadside feature running parallel to the road.",
+            "additionalProperties": false,
+            "properties": {
+                "feature": {
+                    "$ref": "#/definitions/roadsideLinerEnum"
+                },
+                "distanceFromRoadCenterCentimeters": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "widthCentimeters": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "heightCentimeters": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": [
+                "feature",
+                "distanceFromRoadCenterCentimeters",
+                "widthCentimeters",
+                "heightCentimeters"
+            ]
+        },
+        "roadsideFeatureEnum": {
+            "type": "string",
+            "enum": [
+                "boulder",
+                "tree",
+                "post",
+                "hole",
+                "tc_start_sign",
+                "tc_end_sign",
+                "tc_check_in_sign",
+                "start_sign",
+                "finish_sign",
+                "finish_warning_sign"
+            ]
+        },
+        "roadsideFeature": {
+            "type": "object",
+            "description": "A point roadside feature at a specific distance along the segment.",
+            "additionalProperties": false,
+            "properties": {
+                "feature": {
+                    "$ref": "#/definitions/roadsideFeatureEnum"
+                },
+                "distanceFromRoadCenterCentimeters": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "distanceAlongRoadCentimeters": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "widthCentimeters": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "heightCentimeters": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": [
+                "feature",
+                "distanceFromRoadCenterCentimeters",
+                "distanceAlongRoadCentimeters",
+                "widthCentimeters",
+                "heightCentimeters"
+            ]
+        },
+        "segment": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "seq": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Ordering within the stage."
+                },
+                "centerLineLengthMeters": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Length along the road centre line. First segment is zero."
+                },
+                "horizontalAngleDeltaDegrees": {
+                    "type": ["number", "null"],
+                    "description": "Signed heading change over the segment (positive = left, negative = right)."
+                },
+                "verticalAngleDeltaDegrees": {
+                    "type": ["number", "null"],
+                    "description": "Signed pitch change over the segment (positive = climbing, negative = descending). Defined identically to horizontalAngleDeltaDegrees, just on the vertical axis — a crest is a positive-then-negative pair of segments, a dip is the reverse."
+                },
+                "leftSurfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/surfaceStrip"
+                    }
+                },
+                "rightSurfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/surfaceStrip"
+                    }
+                },
+                "leftFeatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideFeature"
+                    }
+                },
+                "rightFeatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideFeature"
+                    }
+                },
+                "leftLiners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideLiner"
+                    }
+                },
+                "rightLiners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadsideLiner"
+                    }
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": ["seq", "centerLineLengthMeters"]
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the stage-geometry schema this document conforms to.",
+            "const": 1
+        },
+        "rally": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": ["name", "date"]
+        },
+        "stage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "extensions": {
+                    "$ref": "#/definitions/extensions"
+                }
+            },
+            "required": ["name"]
+        },
+        "segments": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/segment"
+            }
+        },
+        "extensions": {
+            "$ref": "#/definitions/extensions"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["schemaVersion", "rally", "stage", "segments"]
+}

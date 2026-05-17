@@ -1,0 +1,14 @@
+{
+    "description": "The grid object is strict (additionalProperties:false). Allowed keys are colStart, colEnd, row, and h. The legacy `w` (width-as-pixel-units) was replaced by colEnd (inclusive lane span); declaring w now fails validation.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": [
+            {
+                "key": "a",
+                "kind": "chips",
+                "grid": { "colStart": 0, "row": 0, "h": 1, "w": 2 },
+                "chips": [{ "value": "x" }]
+            }
+        ]
+    }
+}

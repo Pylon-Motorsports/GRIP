@@ -1,0 +1,16 @@
+{
+    "description": "Each paceNote is strict (additionalProperties:false). Per-note app data must live under paceNote.extensions.<app>, not as a sibling property — keeps producers from silently colliding on key names.",
+    "instance": {
+        "schemaVersion": 1,
+        "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+        "stage": { "name": "SS1" },
+        "set": { "version": 1 },
+        "notes": [
+            {
+                "seq": 1,
+                "fieldValues": {},
+                "needsReview": true
+            }
+        ]
+    }
+}
