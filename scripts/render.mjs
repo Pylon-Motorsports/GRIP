@@ -105,28 +105,49 @@ function pickChar(up, down, left, right) {
     return WALL_CHARS[(up ? 1 : 0) | (down ? 2 : 0) | (left ? 4 : 0) | (right ? 8 : 0)];
 }
 
-function vWallAt(spans, r, x) {
-    return r != null && !spans.spanInside[r].has(x);
+function isOccupied(fields, c, r) {
+    if (c < 0 || r < 0) return false;
+    return fields.some((f) => {
+        const cs = f.grid.colStart;
+        const ce = f.grid.colEnd ?? cs;
+        const rs = f.grid.row;
+        const re = rs + (f.grid.h ?? 1) - 1;
+        return c >= cs && c <= ce && r >= rs && r <= re;
+    });
 }
 
-function hWallAt(continuesDown, rowAbove, rowBelow, c) {
-    if (rowAbove == null || rowBelow == null) return true;
-    return !continuesDown[rowAbove][c];
+function vWallPresent(fields, spans, r, x, maxCol) {
+    // Vertical wall at column boundary x in row r. Suppressed when inside
+    // a horizontal span, or when neither adjacent cell is occupied — so
+    // empty cells (including off-grid space at the edges) shed their walls.
+    if (r == null) return false;
+    if (spans.spanInside[r].has(x)) return false;
+    const leftOcc = x > 0 && isOccupied(fields, x - 1, r);
+    const rightOcc = x <= maxCol && isOccupied(fields, x, r);
+    return leftOcc || rightOcc;
 }
 
-function sepLine(spans, continuesDown, rowAbove, rowBelow, maxCol, cellW) {
+function hWallPresent(fields, continuesDown, rowAbove, rowBelow, c) {
+    // Horizontal wall in col c on the separator between rowAbove and
+    // rowBelow. Suppressed when inside a vertical span, or when neither
+    // adjacent cell is occupied (handles top/bottom edges of empty cells).
+    if (rowAbove != null && rowBelow != null && continuesDown[rowAbove][c]) return false;
+    const aboveOcc = rowAbove != null && isOccupied(fields, c, rowAbove);
+    const belowOcc = rowBelow != null && isOccupied(fields, c, rowBelow);
+    return aboveOcc || belowOcc;
+}
+
+function sepLine(fields, spans, continuesDown, rowAbove, rowBelow, maxCol, cellW) {
     let s = '';
     for (let x = 0; x <= maxCol + 1; x++) {
-        const up = x > 0 && x <= maxCol + 1 ? vWallAt(spans, rowAbove, x) : false;
-        const down = x > 0 && x <= maxCol + 1 ? vWallAt(spans, rowBelow, x) : false;
-        const left = x > 0 ? hWallAt(continuesDown, rowAbove, rowBelow, x - 1) : false;
-        const right = x <= maxCol ? hWallAt(continuesDown, rowAbove, rowBelow, x) : false;
-        const edgeUp = (x === 0 || x === maxCol + 1) && rowAbove != null;
-        const edgeDown = (x === 0 || x === maxCol + 1) && rowBelow != null;
-        s += pickChar(up || edgeUp, down || edgeDown, left, right);
+        const up = vWallPresent(fields, spans, rowAbove, x, maxCol);
+        const down = vWallPresent(fields, spans, rowBelow, x, maxCol);
+        const left = x > 0 ? hWallPresent(fields, continuesDown, rowAbove, rowBelow, x - 1) : false;
+        const right = x <= maxCol ? hWallPresent(fields, continuesDown, rowAbove, rowBelow, x) : false;
+        s += pickChar(up, down, left, right);
         if (x <= maxCol) {
-            const suppressed = !hWallAt(continuesDown, rowAbove, rowBelow, x);
-            s += (suppressed ? ' ' : '─').repeat(cellW);
+            const present = hWallPresent(fields, continuesDown, rowAbove, rowBelow, x);
+            s += (present ? '─' : ' ').repeat(cellW);
         }
     }
     return s;
@@ -150,13 +171,17 @@ function cellTerminationsAtRow(covering, r) {
         .sort((a, b) => (a.horizontalRenderOrder ?? 0) - (b.horizontalRenderOrder ?? 0));
 }
 
+function wallChar(fields, spans, r, x, maxCol) {
+    return vWallPresent(fields, spans, r, x, maxCol) ? '│' : ' ';
+}
+
 function labelLineForRow(fields, spans, r, maxCol, cellW) {
-    let s = '│';
+    let s = wallChar(fields, spans, r, 0, maxCol);
     let c = 0;
     while (c <= maxCol) {
         const covering = fieldsCoveringCell(fields, c, r);
         if (covering.length === 0) {
-            s += center('', cellW);
+            s += ' '.repeat(cellW);
             c++;
         } else {
             const cs = covering[0].grid.colStart;
@@ -171,11 +196,7 @@ function labelLineForRow(fields, spans, r, maxCol, cellW) {
             s += center(terminals.length ? labelFor(terminals) : '', width);
             c = ce + 1;
         }
-        if (c <= maxCol) {
-            s += spans.spanInside[r].has(c) ? ' ' : '│';
-        } else {
-            s += '│';
-        }
+        s += wallChar(fields, spans, r, c, maxCol);
     }
     return s;
 }
@@ -208,10 +229,10 @@ function renderFieldConfigBox(fields) {
 
     const lines = [];
     lines.push(colHeaderLine(maxCol, cellW, gutterW));
-    lines.push(gutter('', gutterW) + sepLine(spans, continuesDown, null, 0, maxCol, cellW));
+    lines.push(gutter('', gutterW) + sepLine(fields, spans, continuesDown, null, 0, maxCol, cellW));
     for (let r = 0; r <= maxRow; r++) {
         lines.push(gutter(`row ${r}`, gutterW) + labelLineForRow(fields, spans, r, maxCol, cellW));
-        lines.push(gutter('', gutterW) + sepLine(spans, continuesDown, r, r < maxRow ? r + 1 : null, maxCol, cellW));
+        lines.push(gutter('', gutterW) + sepLine(fields, spans, continuesDown, r, r < maxRow ? r + 1 : null, maxCol, cellW));
     }
     return lines.join('\n') + '\n';
 }
