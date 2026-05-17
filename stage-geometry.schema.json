@@ -48,17 +48,11 @@
                     "minimum": 1
                 },
                 "angleDeltaDegrees": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "Lateral slope relative to the adjacent inner strip (positive = rising away from road centre)."
                 },
                 "depthCentimeters": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "minimum": 0,
                     "description": "For surfaces with overlay (sand, snow, water): 0 indicates packed/dry underneath, a positive value is the depth of the loose material or water on top."
                 },
@@ -66,20 +60,11 @@
                     "$ref": "#/definitions/extensions"
                 }
             },
-            "required": [
-                "surface",
-                "widthCentimeters"
-            ]
+            "required": ["surface", "widthCentimeters"]
         },
         "roadsideLinerEnum": {
             "type": "string",
-            "enum": [
-                "guard_rail",
-                "trees",
-                "wall",
-                "fence",
-                "bridge"
-            ]
+            "enum": ["guard_rail", "trees", "wall", "fence", "bridge"]
         },
         "roadsideLiner": {
             "type": "object",
@@ -178,17 +163,11 @@
                     "description": "Length along the road centre line. First segment is zero."
                 },
                 "horizontalAngleDeltaDegrees": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "Signed heading change over the segment (positive = left, negative = right)."
                 },
                 "verticalAngleDeltaDegrees": {
-                    "type": [
-                        "number",
-                        "null"
-                    ],
+                    "type": ["number", "null"],
                     "description": "Signed pitch change over the segment (positive = climbing, negative = descending). Defined identically to horizontalAngleDeltaDegrees, just on the vertical axis — a crest is a positive-then-negative pair of segments, a dip is the reverse."
                 },
                 "leftSurfaces": {
@@ -231,10 +210,7 @@
                     "$ref": "#/definitions/extensions"
                 }
             },
-            "required": [
-                "seq",
-                "centerLineLengthMeters"
-            ]
+            "required": ["seq", "centerLineLengthMeters"]
         }
     },
     "properties": {
@@ -257,10 +233,7 @@
                     "$ref": "#/definitions/extensions"
                 }
             },
-            "required": [
-                "name",
-                "date"
-            ]
+            "required": ["name", "date"]
         },
         "stage": {
             "type": "object",
@@ -277,9 +250,7 @@
                     "$ref": "#/definitions/extensions"
                 }
             },
-            "required": [
-                "name"
-            ]
+            "required": ["name"]
         },
         "segments": {
             "type": "array",
@@ -292,9 +263,5 @@
         }
     },
     "additionalProperties": false,
-    "required": [
-        "rally",
-        "stage",
-        "segments"
-    ]
+    "required": ["rally", "stage", "segments"]
 }

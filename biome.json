@@ -6,7 +6,17 @@
         "useIgnoreFile": true
     },
     "files": {
-        "includes": ["**/*.js", "**/*.mjs", "**/*.cjs", "**/*.ts", "**/*.tsx", "!node_modules"]
+        "includes": [
+            "**/*.js",
+            "**/*.mjs",
+            "**/*.cjs",
+            "**/*.ts",
+            "**/*.tsx",
+            "**/*.json",
+            "!node_modules",
+            "!package-lock.json",
+            "!.claude"
+        ]
     },
     "formatter": {
         "enabled": true,

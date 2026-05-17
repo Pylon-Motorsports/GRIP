@@ -1,7 +1,7 @@
 {
     "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
     "stage": { "name": "SS1" },
-    "set":   { "version": 1, "crew": "F. Drury", "recceDate": "2025-08-11" },
+    "set": { "version": 1, "crew": "F. Drury", "recceDate": "2025-08-11" },
     "fieldConfig": {
         "schemaVersion": 3,
         "extensions": {
@@ -31,10 +31,7 @@
                 "grid": { "colStart": 1, "colEnd": 2, "row": 0, "h": 1 },
                 "horizontalRenderOrder": 0,
                 "ttsOrder": 0,
-                "chips": [
-                    { "value": "EARLY" },
-                    { "value": "LATE" }
-                ]
+                "chips": [{ "value": "EARLY" }, { "value": "LATE" }]
             },
             {
                 "key": "direction",
@@ -60,11 +57,11 @@
                 "ttsOrder": 3,
                 "chips": [
                     { "value": "1", "extensions": { "grip-note": { "angle": 102 } } },
-                    { "value": "2", "extensions": { "grip-note": { "angle": 84  } } },
-                    { "value": "3", "extensions": { "grip-note": { "angle": 66  } } },
-                    { "value": "4", "extensions": { "grip-note": { "angle": 48  } } },
-                    { "value": "5", "extensions": { "grip-note": { "angle": 30  } } },
-                    { "value": "6", "extensions": { "grip-note": { "angle": 12  } } }
+                    { "value": "2", "extensions": { "grip-note": { "angle": 84 } } },
+                    { "value": "3", "extensions": { "grip-note": { "angle": 66 } } },
+                    { "value": "4", "extensions": { "grip-note": { "angle": 48 } } },
+                    { "value": "5", "extensions": { "grip-note": { "angle": 30 } } },
+                    { "value": "6", "extensions": { "grip-note": { "angle": 12 } } }
                 ]
             },
             {

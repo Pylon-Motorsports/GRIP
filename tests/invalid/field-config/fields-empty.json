@@ -1,0 +1,7 @@
+{
+    "description": "A field-config with an empty `fields` array is rejected — a config that declares no fields can't drive any pace-note rendering. `minItems: 1` on `fields` enforces this.",
+    "instance": {
+        "schemaVersion": 3,
+        "fields": []
+    }
+}

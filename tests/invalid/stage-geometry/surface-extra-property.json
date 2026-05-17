@@ -8,7 +8,11 @@
                 "seq": 0,
                 "centerLineLengthMeters": 0,
                 "leftSurfaces": [
-                    { "surface": "gravel_compact", "widthCentimeters": 150, "frictionCoefficient": 0.7 }
+                    {
+                        "surface": "gravel_compact",
+                        "widthCentimeters": 150,
+                        "frictionCoefficient": 0.7
+                    }
                 ]
             }
         ]

@@ -3,7 +3,7 @@
     "instance": {
         "rally": { "name": "Rocky Mountain", "date": "2025-08-11", "driver": "F. Drury" },
         "stage": { "name": "SS1" },
-        "set":   { "version": 1 },
+        "set": { "version": 1 },
         "notes": []
     }
 }

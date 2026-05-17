@@ -16,9 +16,7 @@
             "type": "object",
             "description": "A single pace-note call within a set. Position/meta lives at the top level; the actual shorthand values live in fieldValues keyed by the rally's field-config keys.",
             "additionalProperties": false,
-            "required": [
-                "seq"
-            ],
+            "required": ["seq"],
             "properties": {
                 "seq": {
                     "type": "integer",
@@ -26,17 +24,11 @@
                     "description": "Ordering within the note set. Also the canonical display sequence number — consumers that render a sequence column should use this."
                 },
                 "indexOdo": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ],
+                    "type": ["integer", "null"],
                     "description": "Distance from stage start in metres."
                 },
                 "indexLandmark": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "fieldValues": {
                     "type": "object",
@@ -49,28 +41,19 @@
                             {
                                 "type": "array",
                                 "items": {
-                                    "oneOf": [
-                                        { "type": "string" },
-                                        { "type": "number" }
-                                    ]
+                                    "oneOf": [{ "type": "string" }, { "type": "number" }]
                                 }
                             }
                         ]
                     }
                 },
                 "createdAt": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time",
                     "description": "When this note was first captured during the recce drive. Distinct from set.recceDate (the document-level date for the whole recce pass) — per-note timestamps preserve intra-stage capture timing for replay/sync."
                 },
                 "updatedAt": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time",
                     "description": "When this note was last modified after initial capture. Null if never edited."
                 },
@@ -84,10 +67,7 @@
         "rally": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-                "name",
-                "date"
-            ],
+            "required": ["name", "date"],
             "properties": {
                 "name": {
                     "type": "string"
@@ -98,10 +78,7 @@
                     "description": "ISO 8601 date (YYYY-MM-DD)."
                 },
                 "crew": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "description": "Free-text identifier for the driving crew (driver / driver + co-driver / team name — producer's choice)."
                 },
                 "id": {
@@ -117,9 +94,7 @@
         "stage": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-                "name"
-            ],
+            "required": ["name"],
             "properties": {
                 "name": {
                     "type": "string"
@@ -136,26 +111,18 @@
         "set": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-                "version"
-            ],
+            "required": ["version"],
             "properties": {
                 "version": {
                     "type": "integer",
                     "minimum": 1
                 },
                 "crew": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "description": "Free-text identifier for the crew on this specific note set (may differ from rally.crew if e.g. a co-driver tested an alternate set)."
                 },
                 "recceDate": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date",
                     "description": "Date the recce pass was made. ISO 8601 date (YYYY-MM-DD). Per-note timing lives on each paceNote's createdAt."
                 },
@@ -171,7 +138,9 @@
         "fieldConfig": {
             "description": "The rally's field-config inlined into the pace-note document so a consumer can render the notes without a separate file fetch. When present, this inlined copy is authoritative for the document. Shape validates against field-config.schema.json.",
             "allOf": [
-                { "$ref": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json" }
+                {
+                    "$ref": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/field-config.schema.json"
+                }
             ]
         },
         "notes": {
@@ -185,10 +154,5 @@
         }
     },
     "additionalProperties": false,
-    "required": [
-        "rally",
-        "stage",
-        "set",
-        "notes"
-    ]
+    "required": ["rally", "stage", "set", "notes"]
 }

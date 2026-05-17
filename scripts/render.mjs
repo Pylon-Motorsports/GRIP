@@ -30,6 +30,7 @@ function center(s, w) {
 }
 
 function gridDims(fields) {
+    if (!fields?.length) return { maxCol: -1, maxRow: -1 };
     const maxCol = Math.max(...fields.map((f) => f.grid.colEnd ?? f.grid.colStart));
     const maxRow = Math.max(...fields.map((f) => f.grid.row + (f.grid.h ?? 1) - 1));
     return { maxCol, maxRow };
@@ -238,6 +239,14 @@ function renderFieldConfigBox(fields) {
     return `${lines.join('\n')}\n`;
 }
 
+function ttsOrderLine(fields) {
+    const sorted = [...fields].sort(
+        (a, b) =>
+            (a.ttsOrder ?? Number.POSITIVE_INFINITY) - (b.ttsOrder ?? Number.POSITIVE_INFINITY),
+    );
+    return sorted.map((f) => f.key).join(' → ');
+}
+
 function renderFieldConfig(doc, sourcePath) {
     if (!doc?.fields?.length) {
         return `## \`${sourcePath}\`\n\n_no fields — skipping render_\n\n`;
@@ -249,6 +258,7 @@ function renderFieldConfig(doc, sourcePath) {
     out += '```\n';
     out += renderFieldConfigBox(doc.fields);
     out += '```\n\n';
+    out += `**TTS reading order:** ${ttsOrderLine(doc.fields)}\n\n`;
     return out;
 }
 

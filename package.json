@@ -22,7 +22,7 @@
         "pre-commit": "npx lint-staged"
     },
     "lint-staged": {
-        "*.{js,mjs,cjs,ts,tsx}": [
+        "*.{js,mjs,cjs,ts,tsx,json}": [
             "biome check --write --no-errors-on-unmatched"
         ]
     }
