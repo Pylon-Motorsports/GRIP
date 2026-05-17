@@ -1,0 +1,14 @@
+{
+    "description": "surface must be a value from the surfaceEnum. Producers can't invent new surface types ad-hoc — extending the vocabulary is a schema-level change.",
+    "instance": {
+        "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+        "stage": { "name": "SS1" },
+        "segments": [
+            {
+                "seq": 0,
+                "centerLineLengthMeters": 0,
+                "leftSurfaces": [{ "surface": "asphalt", "widthCentimeters": 150 }]
+            }
+        ]
+    }
+}

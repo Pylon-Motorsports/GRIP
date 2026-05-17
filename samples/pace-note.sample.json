@@ -59,12 +59,12 @@
                 "horizontalRenderOrder": 3,
                 "ttsOrder": 3,
                 "chips": [
-                    { "value": "1", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 102 } } },
-                    { "value": "2", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 84  } } },
-                    { "value": "3", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 66  } } },
-                    { "value": "4", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 48  } } },
-                    { "value": "5", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 30  } } },
-                    { "value": "6", "textFormat": ["sub"], "extensions": { "grip-note": { "angle": 12  } } }
+                    { "value": "1", "extensions": { "grip-note": { "angle": 102 } } },
+                    { "value": "2", "extensions": { "grip-note": { "angle": 84  } } },
+                    { "value": "3", "extensions": { "grip-note": { "angle": 66  } } },
+                    { "value": "4", "extensions": { "grip-note": { "angle": 48  } } },
+                    { "value": "5", "extensions": { "grip-note": { "angle": 30  } } },
+                    { "value": "6", "extensions": { "grip-note": { "angle": 12  } } }
                 ]
             },
             {
@@ -114,7 +114,7 @@
                 "kind": "chips",
                 "grid": { "colStart": 4, "row": 1, "h": 2 },
                 "horizontalRenderOrder": 6,
-                "ttsOrder": 6,
+                "ttsOrder": 7,
                 "numeric": { "min": 10, "max": 900, "step": 10 },
                 "chips": [
                     { "value": "→", "audible": "in-to" },
@@ -129,7 +129,7 @@
                 "kind": "chips",
                 "grid": { "colStart": 5, "row": 2, "h": 2 },
                 "horizontalRenderOrder": 7,
-                "ttsOrder": 7,
+                "ttsOrder": 8,
                 "repeatable": true,
                 "chips": [
                     { "value": "/\\", "audible": "Narrows" },
@@ -148,7 +148,7 @@
                 "kind": "freetext",
                 "grid": { "colStart": 3, "row": 4, "h": 1 },
                 "horizontalRenderOrder": 8,
-                "ttsOrder": 8,
+                "ttsOrder": 6,
                 "maxLines": 3
             },
             {

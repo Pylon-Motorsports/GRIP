@@ -1,0 +1,15 @@
+{
+    "description": "Regression test: `bridge` was removed from surfaceEnum (it's roadside scenery, not a drivable surface material). Bridge decks now use `steel` or `wood` as the actual surface, and `bridge` lives in roadsideLinerEnum.",
+    "instance": {
+        "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
+        "stage": { "name": "SS1" },
+        "segments": [
+            {
+                "seq": 0,
+                "centerLineLengthMeters": 0,
+                "leftSurfaces":  [{ "surface": "bridge", "widthCentimeters": 150 }],
+                "rightSurfaces": [{ "surface": "bridge", "widthCentimeters": 150 }]
+            }
+        ]
+    }
+}

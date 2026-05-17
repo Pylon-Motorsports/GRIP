@@ -16,7 +16,9 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const ajv = new Ajv({ allErrors: true });
 // Our schemas declare $schema with the https variant of the draft-07 URI;
-// ajv@6 ships the http variant, so register an https alias.
+// ajv@6 ships the http variant, so register an https alias. This shim
+// becomes unnecessary if we move to ajv@8 (which supports both variants
+// natively); see README.md for why we're on ajv@6.
 ajv.addMetaSchema(
     { ...draft07, $id: 'https://json-schema.org/draft-07/schema#' },
     'https://json-schema.org/draft-07/schema#',

@@ -193,13 +193,6 @@
                     ],
                     "description": "Optional TTS override if the spoken form differs from the label."
                 },
-                "textFormat": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Rendering hints (e.g. ['sub'] for subscript)."
-                },
                 "extensions": {
                     "type": "object",
                     "description": "App-specific namespaced data attached to this chip. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app. For example, a compass-dial renderer can store its `angle` value under its own namespace without other consumers having to know about it.",

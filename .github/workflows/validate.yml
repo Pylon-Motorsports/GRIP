@@ -5,9 +5,7 @@ on:
     branches: [main, develop]
   pull_request:
 
-# Opt the JavaScript-action runtime (checkout, setup-node, etc.) into Node 24
-# ahead of GitHub forcing it on 2026-06-02. Unrelated to the Node version we
-# install for our own scripts below — that's pinned via setup-node.
+# See #12 for the plan to drop this opt-in.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
