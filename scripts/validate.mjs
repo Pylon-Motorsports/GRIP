@@ -1,12 +1,13 @@
 #!/usr/bin/env node
+
 // Validate GRIP schemas against their presets/samples and against negative fixtures.
 // Run: npm test  (or: node scripts/validate.mjs)
 
-import Ajv from 'ajv';
-import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { resolve, join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import Ajv from 'ajv';
 
 const require = createRequire(import.meta.url);
 const draft07 = require('ajv/lib/refs/json-schema-draft-07.json');
@@ -90,7 +91,9 @@ test('pace-note sample has no orphan fieldValues keys', () => {
 });
 
 console.log('\nnegative: tests/invalid/<schema>/*.json should all fail');
-console.log('  (each fixture is { description, instance }; description is printed alongside the test name)');
+console.log(
+    '  (each fixture is { description, instance }; description is printed alongside the test name)',
+);
 const invalidRoot = join(ROOT, 'tests', 'invalid');
 if (existsSync(invalidRoot)) {
     for (const schemaName of readdirSync(invalidRoot)) {
@@ -106,11 +109,15 @@ if (existsSync(invalidRoot)) {
             const { description, instance } = fixture;
             if (!instance) {
                 test(`${schemaName}/${file}`, () => {
-                    throw new Error('fixture is missing `instance` — wrap fixtures as { description, instance }');
+                    throw new Error(
+                        'fixture is missing `instance` — wrap fixtures as { description, instance }',
+                    );
                 });
                 continue;
             }
-            const label = description ? `${schemaName}/${file} — ${description}` : `${schemaName}/${file}`;
+            const label = description
+                ? `${schemaName}/${file} — ${description}`
+                : `${schemaName}/${file}`;
             test(label, () => assertInvalid(validate, instance));
         }
     }

@@ -37,12 +37,15 @@ A minimal pace-note document with an inlined `fieldConfig` and two notes lives a
 
 ## Development
 
-Validate the schemas, presets, and samples locally:
+Install dev dependencies and run the full local check:
 
 ```bash
-npm install
-npm test
+npm install      # installs deps and the pre-commit git hook
+npm run check    # biome lint + format check (read-only)
+npm test         # schema validation suite
 ```
+
+`npm run check` is what CI runs for static analysis; `npm run format` writes back any formatter fixes locally. A pre-commit hook (installed automatically on `npm install` via `simple-git-hooks` + `lint-staged`) runs `biome check --write` on every staged JS/TS file before each commit, so style nits are fixed for you.
 
 The harness validates each preset/sample against its schema, cross-checks that `notes[].fieldValues` keys are all declared in the inlined `fieldConfig`, and asserts that every fixture under `tests/invalid/<schema>/` correctly fails validation. CI runs the same suite on every push and pull request via [`.github/workflows/validate.yml`](.github/workflows/validate.yml).
 

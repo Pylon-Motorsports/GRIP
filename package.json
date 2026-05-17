@@ -6,9 +6,24 @@
     "description": "GRIP — Generic Rally Information Protocol. JSON Schema definitions and validation harness.",
     "scripts": {
         "test": "node scripts/validate.mjs",
-        "render": "node scripts/render.mjs"
+        "render": "node scripts/render.mjs",
+        "format": "biome format --write",
+        "lint": "biome lint",
+        "check": "biome check",
+        "prepare": "simple-git-hooks"
     },
     "devDependencies": {
-        "ajv": "^6.12.6"
+        "@biomejs/biome": "^2.4.15",
+        "ajv": "^6.12.6",
+        "lint-staged": "^17.0.5",
+        "simple-git-hooks": "^2.13.1"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npx lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,mjs,cjs,ts,tsx}": [
+            "biome check --write --no-errors-on-unmatched"
+        ]
     }
 }

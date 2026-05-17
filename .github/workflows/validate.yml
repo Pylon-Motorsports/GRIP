@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
+      - name: Lint & format check (biome)
+        run: npm run --silent check
       - run: npm test
       - name: Render samples to step summary
         if: always()

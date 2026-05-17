@@ -4,7 +4,7 @@
 // Run: npm run render
 
 import { readFileSync } from 'node:fs';
-import { resolve, join, dirname } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -96,10 +96,7 @@ function buildContinuesDown(fields, maxCol, maxRow) {
 
 // --- wall logic ------------------------------------------------------------
 
-const WALL_CHARS = [
-    ' ', '╵', '╷', '│', '╴', '┘', '┐', '┤',
-    '╶', '└', '┌', '├', '─', '┴', '┬', '┼',
-];
+const WALL_CHARS = [' ', '╵', '╷', '│', '╴', '┘', '┐', '┤', '╶', '└', '┌', '├', '─', '┴', '┬', '┼'];
 
 function pickChar(up, down, left, right) {
     return WALL_CHARS[(up ? 1 : 0) | (down ? 2 : 0) | (left ? 4 : 0) | (right ? 8 : 0)];
@@ -143,7 +140,8 @@ function sepLine(fields, spans, continuesDown, rowAbove, rowBelow, maxCol, cellW
         const up = vWallPresent(fields, spans, rowAbove, x, maxCol);
         const down = vWallPresent(fields, spans, rowBelow, x, maxCol);
         const left = x > 0 ? hWallPresent(fields, continuesDown, rowAbove, rowBelow, x - 1) : false;
-        const right = x <= maxCol ? hWallPresent(fields, continuesDown, rowAbove, rowBelow, x) : false;
+        const right =
+            x <= maxCol ? hWallPresent(fields, continuesDown, rowAbove, rowBelow, x) : false;
         s += pickChar(up, down, left, right);
         if (x <= maxCol) {
             const present = hWallPresent(fields, continuesDown, rowAbove, rowBelow, x);
@@ -232,9 +230,12 @@ function renderFieldConfigBox(fields) {
     lines.push(gutter('', gutterW) + sepLine(fields, spans, continuesDown, null, 0, maxCol, cellW));
     for (let r = 0; r <= maxRow; r++) {
         lines.push(gutter(`row ${r}`, gutterW) + labelLineForRow(fields, spans, r, maxCol, cellW));
-        lines.push(gutter('', gutterW) + sepLine(fields, spans, continuesDown, r, r < maxRow ? r + 1 : null, maxCol, cellW));
+        lines.push(
+            gutter('', gutterW) +
+                sepLine(fields, spans, continuesDown, r, r < maxRow ? r + 1 : null, maxCol, cellW),
+        );
     }
-    return lines.join('\n') + '\n';
+    return `${lines.join('\n')}\n`;
 }
 
 function renderFieldConfig(doc, sourcePath) {
@@ -242,7 +243,8 @@ function renderFieldConfig(doc, sourcePath) {
         return `## \`${sourcePath}\`\n\n_no fields — skipping render_\n\n`;
     }
     let out = `## \`${sourcePath}\``;
-    if (doc.schemaVersion !== undefined) out += ` &nbsp;·&nbsp; _schemaVersion ${doc.schemaVersion}_`;
+    if (doc.schemaVersion !== undefined)
+        out += ` &nbsp;·&nbsp; _schemaVersion ${doc.schemaVersion}_`;
     out += '\n\n';
     out += '```\n';
     out += renderFieldConfigBox(doc.fields);
@@ -253,7 +255,8 @@ function renderFieldConfig(doc, sourcePath) {
 // --- main ------------------------------------------------------------------
 
 let out = '# Field-config layout\n\n';
-out += '_Auto-generated from each preset. Each cell shows the field key occupying that origin (or `first4/first4` when fields share a cell). Column spans (`colEnd`) and row spans (`h`) render as merged cells with internal walls omitted._\n\n';
+out +=
+    '_Auto-generated from each preset. Each cell shows the field key occupying that origin (or `first4/first4` when fields share a cell). Column spans (`colEnd`) and row spans (`h`) render as merged cells with internal walls omitted._\n\n';
 for (const rel of sources) {
     const doc = JSON.parse(readFileSync(join(ROOT, rel), 'utf-8'));
     out += renderFieldConfig(doc, rel);
