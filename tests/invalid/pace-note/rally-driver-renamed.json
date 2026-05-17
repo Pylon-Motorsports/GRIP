@@ -1,6 +1,7 @@
 {
     "description": "rally.driver was renamed to rally.crew when crew identifiers became free-text (driver / driver+co / team name). Strict additionalProperties on rally rejects the old name — locks in the schema rename.",
     "instance": {
+        "schemaVersion": 1,
         "rally": { "name": "Rocky Mountain", "date": "2025-08-11", "driver": "F. Drury" },
         "stage": { "name": "SS1" },
         "set": { "version": 1 },

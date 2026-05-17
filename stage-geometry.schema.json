@@ -214,6 +214,11 @@
         }
     },
     "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the stage-geometry schema this document conforms to.",
+            "const": 1
+        },
         "rally": {
             "type": "object",
             "additionalProperties": false,
@@ -263,5 +268,5 @@
         }
     },
     "additionalProperties": false,
-    "required": ["rally", "stage", "segments"]
+    "required": ["schemaVersion", "rally", "stage", "segments"]
 }

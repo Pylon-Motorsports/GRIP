@@ -1,6 +1,7 @@
 {
-    "description": "Top-level pace-note documents are strict (additionalProperties:false). Allowed top-level keys are rally, stage, set, fieldConfig, notes, and extensions. App-specific data has to live under extensions.<app>.",
+    "description": "Top-level pace-note documents are strict (additionalProperties:false). Allowed top-level keys are schemaVersion, rally, stage, set, fieldConfig, notes, and extensions. App-specific data has to live under extensions.<app>.",
     "instance": {
+        "schemaVersion": 1,
         "rally": { "name": "Rocky Mountain", "date": "2025-08-11" },
         "stage": { "name": "SS1" },
         "set": { "version": 1 },

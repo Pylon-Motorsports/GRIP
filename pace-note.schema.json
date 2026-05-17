@@ -64,6 +64,11 @@
         }
     },
     "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the pace-note schema this document conforms to.",
+            "const": 1
+        },
         "rally": {
             "type": "object",
             "additionalProperties": false,
@@ -154,5 +159,5 @@
         }
     },
     "additionalProperties": false,
-    "required": ["rally", "stage", "set", "notes"]
+    "required": ["schemaVersion", "rally", "stage", "set", "notes"]
 }
