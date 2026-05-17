@@ -40,7 +40,7 @@ function fieldsAtOrigin(fields, col, row) {
 
 function gridDims(fields) {
     const maxCol = Math.max(...fields.map((f) => f.grid.colEnd ?? f.grid.colStart));
-    const maxRow = Math.max(...fields.map((f) => f.grid.row));
+    const maxRow = Math.max(...fields.map((f) => f.grid.row + (f.grid.h ?? 1) - 1));
     return { maxCol, maxRow };
 }
 
@@ -117,80 +117,141 @@ function buildRowSpans(fields, maxRow) {
     return { spanStart, spanInside };
 }
 
-function wallInRow(spans, r, x, maxCol) {
-    if (x === 0 || x === maxCol + 1) return true;
-    return !spans.spanInside[r].has(x);
-}
-
-function pickConnector(a, b) {
-    // Interior separator connector based on wall presence above/below.
-    // a or b may be null when on the top or bottom edge respectively.
-    if (a == null) return b ? '┬' : '─';
-    if (b == null) return a ? '┴' : '─';
-    if (a && b) return '┼';
-    if (a) return '┴';
-    if (b) return '┬';
-    return '─';
-}
-
-function pickEdgeChar(side, a, b) {
-    if (side === 'left') {
-        if (a == null) return '┌';
-        if (b == null) return '└';
-        return '├';
+function buildContinuesDown(fields, maxCol, maxRow) {
+    // continuesDown[r][c] = true if a field at col c continues from row r
+    // down into row r+1, i.e. the horizontal wall in col c on the
+    // separator between rows r and r+1 should be suppressed. We only need
+    // entries for r in [0, maxRow - 1] (the inter-row separators).
+    const continuesDown = Array.from({ length: Math.max(maxRow, 0) }, () =>
+        new Array(maxCol + 1).fill(false),
+    );
+    for (const f of fields) {
+        const h = f.grid.h ?? 1;
+        if (h <= 1) continue;
+        const cs = f.grid.colStart;
+        const ce = f.grid.colEnd ?? cs;
+        const rs = f.grid.row;
+        const re = rs + h - 1;
+        for (let r = rs; r < re && r < maxRow; r++) {
+            for (let c = cs; c <= ce; c++) continuesDown[r][c] = true;
+        }
     }
-    if (a == null) return '┐';
-    if (b == null) return '┘';
-    return '┤';
+    return continuesDown;
 }
 
-function sepLine(spans, rowAbove, rowBelow, maxCol, cellW) {
+const WALL_CHARS = [
+    ' ', '╵', '╷', '│', '╴', '┘', '┐', '┤',
+    '╶', '└', '┌', '├', '─', '┴', '┬', '┼',
+];
+
+function pickChar(up, down, left, right) {
+    return WALL_CHARS[(up ? 1 : 0) | (down ? 2 : 0) | (left ? 4 : 0) | (right ? 8 : 0)];
+}
+
+function vWallAt(spans, r, x) {
+    // Vertical wall presence at column boundary x in row r.
+    return r != null && !spans.spanInside[r].has(x);
+}
+
+function hWallAt(continuesDown, rowAbove, rowBelow, c) {
+    // Horizontal wall presence in col c on the separator between rowAbove
+    // and rowBelow. On the top/bottom edge it's always present (the edge
+    // itself); otherwise suppressed iff the cell at col c continues from
+    // rowAbove down into rowBelow.
+    if (rowAbove == null || rowBelow == null) return true;
+    return !continuesDown[rowAbove][c];
+}
+
+function sepLine(spans, continuesDown, rowAbove, rowBelow, maxCol, cellW) {
     let s = '';
     for (let x = 0; x <= maxCol + 1; x++) {
-        const a = rowAbove == null ? null : wallInRow(spans, rowAbove, x, maxCol);
-        const b = rowBelow == null ? null : wallInRow(spans, rowBelow, x, maxCol);
-        if (x === 0) s += pickEdgeChar('left', a, b);
-        else if (x === maxCol + 1) s += pickEdgeChar('right', a, b);
-        else s += pickConnector(a, b);
-        if (x <= maxCol) s += '─'.repeat(cellW);
+        const up = x > 0 && x <= maxCol + 1 ? vWallAt(spans, rowAbove, x) : false;
+        const down = x > 0 && x <= maxCol + 1 ? vWallAt(spans, rowBelow, x) : false;
+        const left = x > 0 ? hWallAt(continuesDown, rowAbove, rowBelow, x - 1) : false;
+        const right = x <= maxCol ? hWallAt(continuesDown, rowAbove, rowBelow, x) : false;
+        // x=0 and x=maxCol+1 are the grid's vertical edges — those vertical
+        // walls always exist (the left and right sides of the grid).
+        const edgeUp = (x === 0 || x === maxCol + 1) && rowAbove != null;
+        const edgeDown = (x === 0 || x === maxCol + 1) && rowBelow != null;
+        s += pickChar(up || edgeUp, down || edgeDown, left, right);
+        if (x <= maxCol) {
+            const suppressed = !hWallAt(continuesDown, rowAbove, rowBelow, x);
+            s += (suppressed ? ' ' : '─').repeat(cellW);
+        }
     }
     return s;
 }
 
-function contentLine(fields, spans, r, maxCol, cellW, textFn) {
+function fieldsCoveringCell(fields, c, r) {
+    return fields.filter((f) => {
+        const cs = f.grid.colStart;
+        const ce = f.grid.colEnd ?? cs;
+        const rs = f.grid.row;
+        const re = rs + (f.grid.h ?? 1) - 1;
+        return c >= cs && c <= ce && r >= rs && r <= re;
+    });
+}
+
+function cellOriginsAtRow(covering, r) {
+    return covering
+        .filter((f) => f.grid.row === r)
+        .sort((a, b) => (a.horizontalRenderOrder ?? 0) - (b.horizontalRenderOrder ?? 0));
+}
+
+function cellTerminationsAtRow(covering, r) {
+    return covering
+        .filter((f) => f.grid.row + (f.grid.h ?? 1) - 1 === r)
+        .sort((a, b) => (a.horizontalRenderOrder ?? 0) - (b.horizontalRenderOrder ?? 0));
+}
+
+function textLineForRow(fields, spans, r, maxCol, cellW, contentFn) {
     let s = '│';
     let c = 0;
     while (c <= maxCol) {
-        if (spans.spanInside[r].has(c)) {
+        const covering = fieldsCoveringCell(fields, c, r);
+        if (covering.length === 0) {
+            s += center('', cellW);
             c++;
-            continue;
+        } else {
+            const cs = covering[0].grid.colStart;
+            if (c !== cs) {
+                c++;
+                continue;
+            }
+            const ce = Math.max(...covering.map((f) => f.grid.colEnd ?? f.grid.colStart));
+            const span = ce - cs + 1;
+            const width = span * cellW + (span - 1);
+            s += center(contentFn(covering, r), width);
+            c = ce + 1;
         }
-        const ce = spans.spanStart[r].get(c) ?? c;
-        const span = ce - c + 1;
-        const width = span * cellW + (span - 1); // suppressed walls become content space
-        const here = fieldsAtOrigin(fields, c, r);
-        s += center(textFn(here), width);
-        c = ce + 1;
-        s += nextWallChar(spans, r, c, maxCol);
+        if (c <= maxCol) {
+            s += spans.spanInside[r].has(c) ? ' ' : '│';
+        } else {
+            s += '│';
+        }
     }
     return s;
-}
-
-function nextWallChar(spans, r, c, maxCol) {
-    if (c > maxCol) return '│';
-    return wallInRow(spans, r, c, maxCol) ? '│' : ' ';
 }
 
 function renderBox(fields, maxCol, maxRow, cellW, note) {
     const spans = buildRowSpans(fields, maxRow);
-    const valueFn = (here) => (here.length && note ? valuesFor(here, note) : '');
-    const labelFn = (here) => (here.length ? labelFor(here) : '');
-    const lines = [sepLine(spans, null, 0, maxCol, cellW)];
+    const continuesDown = buildContinuesDown(fields, maxCol, maxRow);
+
+    const valueFn = (covering, r) => {
+        const origins = cellOriginsAtRow(covering, r);
+        return origins.length && note ? valuesFor(origins, note) : '';
+    };
+    const labelFn = (covering, r) => {
+        const terminals = cellTerminationsAtRow(covering, r);
+        return terminals.length ? labelFor(terminals) : '';
+    };
+
+    const lines = [sepLine(spans, continuesDown, null, 0, maxCol, cellW)];
     for (let r = 0; r <= maxRow; r++) {
         lines.push(
-            contentLine(fields, spans, r, maxCol, cellW, valueFn),
-            contentLine(fields, spans, r, maxCol, cellW, labelFn),
-            sepLine(spans, r, r < maxRow ? r + 1 : null, maxCol, cellW),
+            textLineForRow(fields, spans, r, maxCol, cellW, valueFn),
+            textLineForRow(fields, spans, r, maxCol, cellW, labelFn),
+            sepLine(spans, continuesDown, r, r < maxRow ? r + 1 : null, maxCol, cellW),
         );
     }
     return lines.join('\n') + '\n';
