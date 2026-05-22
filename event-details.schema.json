@@ -1,0 +1,170 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/event-details.schema.json",
+    "title": "GripEventDetails",
+    "description": "Per-stage organisational details for one stage of a motorsport event — start line, finish line, speed limits along the liaison/transit, staging areas (parc fermé, pre-stage holds), time controls, and free-text transit instructions. Distinct from stage-geometry (the physical shape of the timed stage) and pace-note (driver shorthand). Intended for in-car displays guiding crews between and through stages. References its parent event by natural key.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "event", "stage"],
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended); values are objects owned by that app.",
+            "additionalProperties": { "type": "object" }
+        },
+        "geoPoint": {
+            "type": "object",
+            "description": "WGS84 geographic position. Latitude in degrees [-90, 90], longitude in degrees [-180, 180]. Altitude in metres above the ellipsoid; null when not known.",
+            "additionalProperties": false,
+            "required": ["lat", "lon"],
+            "properties": {
+                "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+                "lon": { "type": "number", "minimum": -180, "maximum": 180 },
+                "altMeters": { "type": ["number", "null"] }
+            }
+        },
+        "controlLine": {
+            "type": "object",
+            "description": "A geographic line crossing the road, defined by two end points (typically the two sides of the road surface) plus optional free-text description. Used for startLine / finishLine and for any user-defined crossings consumers (like stage-geometry) may want to reference.",
+            "additionalProperties": false,
+            "required": ["from", "to"],
+            "properties": {
+                "from": { "$ref": "#/definitions/geoPoint" },
+                "to": { "$ref": "#/definitions/geoPoint" },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "speedLimit": {
+            "type": "object",
+            "description": "A speed limit applying from `start` to `end` along the route. Use multiple speedLimit entries for sections with different limits.",
+            "additionalProperties": false,
+            "required": ["limitKilometresPerHour", "start", "end"],
+            "properties": {
+                "limitKilometresPerHour": { "type": "integer", "minimum": 0 },
+                "start": { "$ref": "#/definitions/geoPoint" },
+                "end": { "$ref": "#/definitions/geoPoint" },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "stagingArea": {
+            "type": "object",
+            "description": "A geographic area where cars gather (pre-stage hold, parc fermé, service in/out, regroup, refuel).",
+            "additionalProperties": false,
+            "required": ["name", "kind", "location"],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Crew-facing label, e.g. 'Pre-stage SS1' or 'Service A'."
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "pre_stage",
+                        "parc_ferme",
+                        "service_in",
+                        "service_out",
+                        "regroup",
+                        "refuel",
+                        "other"
+                    ]
+                },
+                "location": { "$ref": "#/definitions/geoPoint" },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "timeControl": {
+            "type": "object",
+            "description": "A time-control point — crews must arrive within their target window. `targetTime` is null for 'as-you-arrive' controls.",
+            "additionalProperties": false,
+            "required": ["name", "kind", "location"],
+            "properties": {
+                "name": { "type": "string", "description": "e.g. 'TC1' or 'TC2A'." },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "tc",
+                        "stage_start",
+                        "stage_finish",
+                        "flying_finish",
+                        "stop",
+                        "service_in",
+                        "service_out",
+                        "other"
+                    ]
+                },
+                "location": { "$ref": "#/definitions/geoPoint" },
+                "targetTime": {
+                    "type": ["string", "null"],
+                    "format": "date-time",
+                    "description": "ISO 8601 UTC target arrival time. Null for 'as-arrived' or unscheduled controls."
+                },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "transitInstruction": {
+            "type": "object",
+            "description": "A turn-by-turn instruction for the liaison/transit before or after the timed stage. Free-text with an optional geographic anchor and optional cumulative distance.",
+            "additionalProperties": false,
+            "required": ["instruction"],
+            "properties": {
+                "location": { "$ref": "#/definitions/geoPoint" },
+                "distanceMeters": {
+                    "type": ["number", "null"],
+                    "minimum": 0,
+                    "description": "Optional cumulative distance from the start of this transit leg, in metres."
+                },
+                "instruction": { "type": "string" },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the event-details schema this document conforms to.",
+            "const": 1
+        },
+        "event": {
+            "type": "object",
+            "description": "Natural-key reference to the parent event header.",
+            "additionalProperties": false,
+            "required": ["name", "date"],
+            "properties": {
+                "name": { "type": "string" },
+                "date": { "type": "string", "format": "date" },
+                "id": { "type": "string", "format": "uuid" }
+            }
+        },
+        "stage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+                "name": { "type": "string" },
+                "id": { "type": "string", "format": "uuid" }
+            }
+        },
+        "startLine": { "$ref": "#/definitions/controlLine" },
+        "finishLine": { "$ref": "#/definitions/controlLine" },
+        "speedLimits": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/speedLimit" }
+        },
+        "stagingAreas": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/stagingArea" }
+        },
+        "timeControls": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/timeControl" }
+        },
+        "transitInstructions": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/transitInstruction" }
+        },
+        "extensions": { "$ref": "#/definitions/extensions" }
+    }
+}

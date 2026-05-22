@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+    "car": { "number": "42" },
+    "samples": [
+        {
+            "clientCapturedAt": "2025-08-11T14:32:00Z",
+            "position": { "lat": 35.1, "lon": -106.6, "accuracyMeters": 3.0, "source": "gps" },
+            "speedMetersPerSecond": 30.2,
+            "headingDegrees": 220,
+            "emergency": false
+        },
+        {
+            "clientCapturedAt": "2025-08-11T14:32:01Z",
+            "position": {
+                "lat": 35.1005,
+                "lon": -106.6005,
+                "accuracyMeters": 3.0,
+                "source": "gps"
+            },
+            "speedMetersPerSecond": 30.5,
+            "headingDegrees": 220,
+            "emergency": false
+        },
+        {
+            "clientCapturedAt": "2025-08-11T14:32:02Z",
+            "position": {
+                "lat": 35.101,
+                "lon": -106.601,
+                "accuracyMeters": 4.0,
+                "source": "hybrid"
+            },
+            "speedMetersPerSecond": 30.7,
+            "headingDegrees": 222,
+            "emergency": false
+        }
+    ]
+}

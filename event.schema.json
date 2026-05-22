@@ -1,0 +1,65 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/event.schema.json",
+    "title": "GripEvent",
+    "description": "Thin event header — minimal organisational data identifying a motorsport event. Per-stage logistics (start/finish lines, time controls, speed limits, staging) live in event-details documents; per-stage geometry in stage-geometry; per-stage driver notes in pace-note. App-specific data lives under namespaced `extensions` objects on the top-level event.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "name", "date"],
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended, e.g. 'grip-note'); values are objects owned by that app.",
+            "additionalProperties": { "type": "object" }
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the event schema this document conforms to.",
+            "const": 1
+        },
+        "name": {
+            "type": "string"
+        },
+        "date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date (YYYY-MM-DD). For multi-day events, the event's first competitive day."
+        },
+        "endDate": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "Optional ISO 8601 end date for multi-day events. Null for single-day."
+        },
+        "discipline": {
+            "type": "string",
+            "enum": [
+                "rally",
+                "rallycross",
+                "hillclimb",
+                "rally_raid",
+                "trial",
+                "stage_rally",
+                "other"
+            ],
+            "description": "Type of motorsport event. `stage_rally` distinguishes the classic stage format from a single-stage rally; `other` is the escape hatch for disciplines we haven't named."
+        },
+        "organizer": {
+            "type": ["string", "null"],
+            "description": "Free-text name of the organising body or club."
+        },
+        "venue": {
+            "type": ["string", "null"],
+            "description": "Free-text name of the venue or region (e.g. 'Sandia Mountains, NM')."
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional stable identifier for implementations that need it. Not required for exchange; natural keys (name + date) are authoritative."
+        },
+        "extensions": {
+            "$ref": "#/definitions/extensions"
+        }
+    }
+}

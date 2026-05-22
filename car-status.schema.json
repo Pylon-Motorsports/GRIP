@@ -1,0 +1,88 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/car-status.schema.json",
+    "title": "GripCarStatus",
+    "description": "A single point-in-time observation of one car's state — position, optional speed, optional heading, emergency flag, and timestamps. Producers (in-car devices) capture and send these; receivers (event control, rally management) ingest them. Two timestamp fields make ownership explicit: `clientCapturedAt` is set by the producer at sample time, `serverReceivedAt` is set by the ingest server on arrival. Either may be null. App-specific telemetry (g-forces, tyre pressures, drivetrain) lives under `extensions`.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "car", "position"],
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended).",
+            "additionalProperties": { "type": "object" }
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the car-status schema this document conforms to.",
+            "const": 1
+        },
+        "car": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["number"],
+            "properties": {
+                "number": {
+                    "type": "string",
+                    "description": "Competition number. String to permit alphanumeric entries (e.g. '0' or '12A')."
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Optional stable identifier for implementations that need it. Not required for exchange; the competition number is authoritative within an event."
+                }
+            }
+        },
+        "clientCapturedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the sample was captured on the in-car device. Set by the producer. Null if the device can't determine a reliable wall-clock time."
+        },
+        "serverReceivedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the sample was received by the ingest server. Set by the server on arrival; producers should leave this null."
+        },
+        "position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["lat", "lon"],
+            "properties": {
+                "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+                "lon": { "type": "number", "minimum": -180, "maximum": 180 },
+                "altMeters": {
+                    "type": ["number", "null"],
+                    "description": "Altitude in metres above the WGS84 ellipsoid."
+                },
+                "accuracyMeters": {
+                    "type": ["number", "null"],
+                    "minimum": 0,
+                    "description": "Estimated 1σ horizontal position accuracy in metres. Smaller is better; null when unknown."
+                },
+                "source": {
+                    "type": "string",
+                    "enum": ["gps", "dr", "hybrid"],
+                    "description": "Position source: GPS, dead-reckoning (no satellite signal), or hybrid sensor fusion (typical for in-car devices with both)."
+                }
+            }
+        },
+        "speedMetersPerSecond": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "description": "Ground speed in metres per second. Null when unknown."
+        },
+        "headingDegrees": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "exclusiveMaximum": 360,
+            "description": "Heading in degrees clockwise from true north. Null when unknown or stationary."
+        },
+        "emergency": {
+            "type": "boolean",
+            "description": "True if the car has signalled an emergency (e.g. SOS/OK button pressed). Receivers should treat as latched until the producer clears it with a follow-up sample carrying emergency:false."
+        },
+        "extensions": { "$ref": "#/definitions/extensions" }
+    }
+}

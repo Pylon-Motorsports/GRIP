@@ -1,0 +1,16 @@
+{
+    "schemaVersion": 1,
+    "car": { "number": "42" },
+    "clientCapturedAt": "2025-08-11T14:32:15Z",
+    "serverReceivedAt": null,
+    "position": {
+        "lat": 35.105,
+        "lon": -106.605,
+        "altMeters": 2100,
+        "accuracyMeters": 3.5,
+        "source": "hybrid"
+    },
+    "speedMetersPerSecond": 28.5,
+    "headingDegrees": 215,
+    "emergency": false
+}

@@ -1,0 +1,50 @@
+{
+    "schemaVersion": 1,
+    "event": { "name": "Rocky Mountain", "date": "2025-08-11" },
+    "stage": { "name": "SS1" },
+    "startLine": {
+        "from": { "lat": 35.1, "lon": -106.6 },
+        "to": { "lat": 35.1001, "lon": -106.6 },
+        "description": "Across the fire road just past the cattle guard"
+    },
+    "finishLine": {
+        "from": { "lat": 35.15, "lon": -106.65 },
+        "to": { "lat": 35.1501, "lon": -106.65 }
+    },
+    "speedLimits": [
+        {
+            "limitKilometresPerHour": 50,
+            "start": { "lat": 35.08, "lon": -106.58 },
+            "end": { "lat": 35.09, "lon": -106.59 },
+            "description": "Through the village"
+        }
+    ],
+    "stagingAreas": [
+        {
+            "name": "Pre-stage SS1",
+            "kind": "pre_stage",
+            "location": { "lat": 35.099, "lon": -106.6 }
+        }
+    ],
+    "timeControls": [
+        {
+            "name": "TC1",
+            "kind": "stage_start",
+            "location": { "lat": 35.1, "lon": -106.6 },
+            "targetTime": "2025-08-11T14:30:00Z"
+        },
+        {
+            "name": "TC2",
+            "kind": "flying_finish",
+            "location": { "lat": 35.15, "lon": -106.65 },
+            "targetTime": null
+        }
+    ],
+    "transitInstructions": [
+        {
+            "location": { "lat": 35.08, "lon": -106.58 },
+            "distanceMeters": 2400,
+            "instruction": "Turn right at the red barn, follow the dirt road"
+        }
+    ]
+}

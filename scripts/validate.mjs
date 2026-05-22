@@ -34,6 +34,10 @@ const validators = {
     'field-config': loadSchema('field-config.schema.json'),
     'pace-note': loadSchema('pace-note.schema.json'),
     'stage-geometry': loadSchema('stage-geometry.schema.json'),
+    event: loadSchema('event.schema.json'),
+    'event-details': loadSchema('event-details.schema.json'),
+    'car-status': loadSchema('car-status.schema.json'),
+    'car-status-batch': loadSchema('car-status-batch.schema.json'),
 };
 
 let passed = 0;
@@ -80,6 +84,18 @@ test('pace-note sample.fieldConfig validates as field-config', () => {
 });
 test('stage-geometry sample validates as stage-geometry', () => {
     assertValid(validators['stage-geometry'], loadJson('samples/stage-geometry.sample.json'));
+});
+test('event sample validates as event', () => {
+    assertValid(validators.event, loadJson('samples/event.sample.json'));
+});
+test('event-details sample validates as event-details', () => {
+    assertValid(validators['event-details'], loadJson('samples/event-details.sample.json'));
+});
+test('car-status sample validates as car-status', () => {
+    assertValid(validators['car-status'], loadJson('samples/car-status.sample.json'));
+});
+test('car-status-batch sample validates as car-status-batch', () => {
+    assertValid(validators['car-status-batch'], loadJson('samples/car-status-batch.sample.json'));
 });
 
 console.log('\ncross-checks: producer/consumer contract');
