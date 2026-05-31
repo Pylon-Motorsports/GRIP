@@ -91,6 +91,9 @@ test('event sample validates as event', () => {
 test('event-details sample validates as event-details', () => {
     assertValid(validators['event-details'], loadJson('samples/event-details.sample.json'));
 });
+test('event-details rallyx sample validates as event-details', () => {
+    assertValid(validators['event-details'], loadJson('samples/event-details-rallyx.sample.json'));
+});
 test('car-status sample validates as car-status', () => {
     assertValid(validators['car-status'], loadJson('samples/car-status.sample.json'));
 });

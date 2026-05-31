@@ -1,0 +1,61 @@
+{
+    "schemaVersion": 1,
+    "event": { "name": "Spring RallyX", "date": "2025-06-15" },
+    "stage": { "name": "Course A — Run 1" },
+    "startLine": {
+        "from": { "lat": 40.5, "lon": -105.0 },
+        "to": { "lat": 40.5, "lon": -104.99995 },
+        "description": "Lined up at the start gate"
+    },
+    "finishLine": {
+        "from": { "lat": 40.5018, "lon": -105.0 },
+        "to": { "lat": 40.5018, "lon": -104.99995 }
+    },
+    "courseMarkers": [
+        {
+            "name": "Slalom 1",
+            "kind": "cone",
+            "passSide": "left",
+            "location": { "lat": 40.5005, "lon": -104.99998 }
+        },
+        {
+            "name": "Slalom 2",
+            "kind": "cone",
+            "passSide": "right",
+            "location": { "lat": 40.5007, "lon": -104.99998 }
+        },
+        {
+            "name": "Slalom 3",
+            "kind": "cone",
+            "passSide": "left",
+            "location": { "lat": 40.5009, "lon": -104.99998 }
+        },
+        {
+            "name": "Hairpin Apex",
+            "kind": "cone",
+            "passSide": "right",
+            "location": { "lat": 40.5015, "lon": -105.00005 },
+            "description": "Tight 180 around this cone — outside line will spin"
+        },
+        {
+            "name": "Finish Marker",
+            "kind": "flag",
+            "location": { "lat": 40.5017, "lon": -104.99998 },
+            "description": "Informational — slow down zone after this point"
+        }
+    ],
+    "courseBoundaries": [
+        {
+            "name": "Outer perimeter",
+            "side": "outer",
+            "closed": true,
+            "points": [
+                { "lat": 40.4998, "lon": -105.0002 },
+                { "lat": 40.502, "lon": -105.0002 },
+                { "lat": 40.502, "lon": -104.9998 },
+                { "lat": 40.4998, "lon": -104.9998 }
+            ],
+            "description": "Tape boundary around the paddock — exiting it is a course-out"
+        }
+    ]
+}

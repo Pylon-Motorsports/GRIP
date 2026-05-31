@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/event-details.schema.json",
     "title": "GripEventDetails",
-    "description": "Per-stage organisational details for one stage of a motorsport event — start line, finish line, speed limits along the liaison/transit, staging areas (parc fermé, pre-stage holds), time controls, and free-text transit instructions. Distinct from stage-geometry (the physical shape of the timed stage) and pace-note (driver shorthand). Intended for in-car displays guiding crews between and through stages. References its parent event by natural key.",
+    "description": "Per-stage organisational details for one stage of a motorsport event, transmitted from event control to in-car devices — start line, finish line, speed limits along the liaison/transit, staging areas (parc fermé, pre-stage holds), time controls, free-text transit instructions, discrete course markers (e.g. rallyX cones with pass-side), and continuous course boundaries (e.g. paved racetrack edges or cone-free rallyX boundary tape). Distinct from stage-geometry (the physical shape of the timed stage) and pace-note (driver shorthand). References its parent event by natural key.",
     "type": "object",
     "additionalProperties": false,
     "required": ["schemaVersion", "event", "stage"],
@@ -119,6 +119,59 @@
                 "instruction": { "type": "string" },
                 "extensions": { "$ref": "#/definitions/extensions" }
             }
+        },
+        "courseMarker": {
+            "type": "object",
+            "description": "A physical marker along the course (cone, gate post, flag, etc.) with an optional pass-side rule. For paired markers that the car must drive between (e.g. a gate), use a `controlLine` instead.",
+            "additionalProperties": false,
+            "required": ["location"],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Optional crew-facing label, e.g. 'Cone 12' or 'Slalom 1'."
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": ["cone", "post", "flag", "barrier", "other"]
+                },
+                "passSide": {
+                    "type": "string",
+                    "enum": ["left", "right", "either"],
+                    "description": "Which side of the marker the car must pass on, from the driver's perspective. Omit when the marker is purely informational and carries no pass-side constraint."
+                },
+                "location": { "$ref": "#/definitions/geoPoint" },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "courseBoundary": {
+            "type": "object",
+            "description": "A continuous course boundary expressed as an ordered polyline of geoPoints. Use for paved-circuit track edges, cone-free rallyX boundary tape, or any other line-defined limit of the drivable area. Multiple boundary objects are normal — one per edge (e.g. left and right), or one per disjoint segment.",
+            "additionalProperties": false,
+            "required": ["points"],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Optional crew-facing label, e.g. 'Outer track edge' or 'Right boundary'."
+                },
+                "side": {
+                    "type": "string",
+                    "enum": ["left", "right", "inner", "outer", "either"],
+                    "description": "Which side of the course this boundary defines. left/right are relative to the driver's forward direction (typical for point-to-point courses); inner/outer are relative to a closed lap (typical for racetracks)."
+                },
+                "points": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": { "$ref": "#/definitions/geoPoint" },
+                    "description": "Ordered polyline of geoPoints defining the boundary."
+                },
+                "closed": {
+                    "type": "boolean",
+                    "description": "True if the boundary forms a closed loop (the implicit segment from the last point back to the first is part of the boundary). Default false."
+                },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
         }
     },
     "properties": {
@@ -164,6 +217,16 @@
         "transitInstructions": {
             "type": "array",
             "items": { "$ref": "#/definitions/transitInstruction" }
+        },
+        "courseMarkers": {
+            "type": "array",
+            "description": "Ordered list of physical markers along the course. Array order is the sequence in which they are encountered.",
+            "items": { "$ref": "#/definitions/courseMarker" }
+        },
+        "courseBoundaries": {
+            "type": "array",
+            "description": "Continuous polyline boundaries that delimit the drivable area. One entry per distinct boundary (typically left + right for point-to-point; inner + outer for closed loops).",
+            "items": { "$ref": "#/definitions/courseBoundary" }
         },
         "extensions": { "$ref": "#/definitions/extensions" }
     }
