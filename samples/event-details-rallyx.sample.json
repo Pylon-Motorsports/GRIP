@@ -35,6 +35,7 @@
             "kind": "cone",
             "passSide": "right",
             "location": { "lat": 40.5015, "lon": -105.00005 },
+            "radiusMeters": 1.5,
             "description": "Tight 180 around this cone — outside line will spin"
         },
         {

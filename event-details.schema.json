@@ -140,6 +140,11 @@
                     "description": "Which side of the marker the car must pass on, from the driver's perspective. Omit when the marker is purely informational and carries no pass-side constraint."
                 },
                 "location": { "$ref": "#/definitions/geoPoint" },
+                "radiusMeters": {
+                    "type": ["number", "null"],
+                    "minimum": 0,
+                    "description": "Optional radius in metres centred on `location`. Producers and consumers interpret this contextually — typically as an exclusion zone (combined with passSide) used for course-out detection, or as a 'this marker affects the area within radius' hint. Omit when no zone applies."
+                },
                 "description": { "type": ["string", "null"] },
                 "extensions": { "$ref": "#/definitions/extensions" }
             }
