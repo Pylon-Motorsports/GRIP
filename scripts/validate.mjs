@@ -39,6 +39,7 @@ const validators = {
     'car-status': loadSchema('car-status.schema.json'),
     'car-status-batch': loadSchema('car-status-batch.schema.json'),
     message: loadSchema('message.schema.json'),
+    'message-ack': loadSchema('message-ack.schema.json'),
 };
 
 let passed = 0;
@@ -106,6 +107,9 @@ test('message sample (car → net) validates as message', () => {
 });
 test('message-broadcast sample (net → all) validates as message', () => {
     assertValid(validators.message, loadJson('samples/message-broadcast.sample.json'));
+});
+test('message-ack sample validates as message-ack', () => {
+    assertValid(validators['message-ack'], loadJson('samples/message-ack.sample.json'));
 });
 
 console.log('\ncross-checks: producer/consumer contract');

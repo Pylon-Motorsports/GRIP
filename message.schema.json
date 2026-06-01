@@ -93,7 +93,7 @@
         "priority": {
             "type": "string",
             "enum": ["routine", "urgent", "emergency"],
-            "description": "Optional priority hint for routing and display. Producers should reserve 'emergency' for safety-critical traffic."
+            "description": "Optional transport-layer priority hint. Repeaters and low-bandwidth networks can use this to prioritize critical traffic (bump transmit power, allocate bandwidth, skip the routine queue). Producers should reserve 'emergency' for safety-critical traffic — life-or-death situations."
         },
         "replyTo": {
             "type": "string",

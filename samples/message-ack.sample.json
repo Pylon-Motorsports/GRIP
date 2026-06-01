@@ -1,0 +1,8 @@
+{
+    "schemaVersion": 1,
+    "ackOf": "msg-c42-2025-08-11T15:23:00-001",
+    "from": { "kind": "control", "controlName": "net", "label": "Net Control" },
+    "status": "delivered",
+    "priority": "routine",
+    "clientCapturedAt": "2025-08-11T15:23:05Z"
+}

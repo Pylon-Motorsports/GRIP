@@ -81,7 +81,12 @@
         },
         "emergency": {
             "type": "boolean",
-            "description": "True if the car has signalled an emergency (e.g. SOS/OK button pressed). Receivers should treat as latched until the producer clears it with a follow-up sample carrying emergency:false."
+            "description": "True if the car has signalled an emergency (e.g. SOS/OK button pressed). Receivers should treat as latched until the producer clears it with a follow-up sample carrying emergency:false. Distinct from `priority` — `emergency` is a state flag describing the car; `priority` is a transport-layer hint about this specific document."
+        },
+        "priority": {
+            "type": "string",
+            "enum": ["routine", "urgent", "emergency"],
+            "description": "Optional transport-layer priority hint. Repeaters and low-bandwidth networks can use this to prioritize critical traffic (bump transmit power, allocate bandwidth). Producers should typically bump to 'emergency' when emergency=true, but the two fields are independent so the schema doesn't enforce a coupling."
         },
         "extensions": { "$ref": "#/definitions/extensions" }
     }

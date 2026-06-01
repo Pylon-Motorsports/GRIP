@@ -1,0 +1,92 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/message-ack.schema.json",
+    "title": "GripMessageAck",
+    "description": "An acknowledgement of a GripMessage by its `id`. ONLY useful when the underlying transport doesn't already track delivery — most modern transports (TCP, WebSocket, HTTP, MQTT QoS levels, etc.) handle ack natively, and producers should rely on those mechanisms first. Ship this schema when you're moving messages over a fire-and-forget channel (e.g. simplex radio with no return path until the next handshake, or a one-way satellite link) and need delivery state to live in the protocol payload itself.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "ackOf", "from", "status"],
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended); values are objects owned by that app.",
+            "additionalProperties": { "type": "object" }
+        },
+        "address": {
+            "type": "object",
+            "description": "A structured participant address. Same shape as `address` in message.schema.json — duplicated here so each schema is self-contained.",
+            "additionalProperties": false,
+            "required": ["kind"],
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "enum": ["car", "control", "broadcast", "other"]
+                },
+                "carNumber": { "type": "string" },
+                "controlName": { "type": "string" },
+                "label": { "type": "string" },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            },
+            "allOf": [
+                {
+                    "if": { "required": ["kind"], "properties": { "kind": { "const": "car" } } },
+                    "then": { "required": ["carNumber"], "properties": { "controlName": false } }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "control" } }
+                    },
+                    "then": { "required": ["controlName"], "properties": { "carNumber": false } }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "broadcast" } }
+                    },
+                    "then": { "properties": { "carNumber": false, "controlName": false } }
+                }
+            ]
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the message-ack schema this document conforms to.",
+            "const": 1
+        },
+        "ackOf": {
+            "type": "string",
+            "description": "The `id` of the message being acknowledged. Must match the original message's `id` field exactly — implementations correlate by string equality."
+        },
+        "from": {
+            "$ref": "#/definitions/address",
+            "description": "The acknowledging participant — typically the original recipient (or the recipient's transport agent on its behalf)."
+        },
+        "status": {
+            "type": "string",
+            "enum": ["delivered", "read", "failed"],
+            "description": "Delivery state. 'delivered' = the message reached the recipient's device. 'read' = the recipient processed / displayed it (e.g. the crew saw the broadcast). 'failed' = the recipient couldn't process the message; see `reason` for context."
+        },
+        "reason": {
+            "type": "string",
+            "description": "Optional human-readable explanation. Primarily useful when status = 'failed' (e.g. 'unknown carNumber', 'message body too long for radio')."
+        },
+        "priority": {
+            "type": "string",
+            "enum": ["routine", "urgent", "emergency"],
+            "description": "Optional transport-layer priority hint. Repeaters and low-bandwidth networks can use this to prioritize critical traffic (bump transmit power, allocate bandwidth, skip the routine queue). Should typically mirror the priority of the acked message."
+        },
+        "clientCapturedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the ack was authored on the producing device."
+        },
+        "serverReceivedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the ack was received by the routing server. Producers should leave this null."
+        },
+        "extensions": { "$ref": "#/definitions/extensions" }
+    }
+}

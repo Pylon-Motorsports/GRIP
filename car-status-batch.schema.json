@@ -73,6 +73,11 @@
             "minItems": 1,
             "items": { "$ref": "#/definitions/sample" }
         },
+        "priority": {
+            "type": "string",
+            "enum": ["routine", "urgent", "emergency"],
+            "description": "Optional transport-layer priority hint for the whole batch. If individual samples need different priorities, split them across multiple batches."
+        },
         "extensions": { "$ref": "#/definitions/extensions" }
     }
 }
