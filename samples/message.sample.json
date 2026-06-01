@@ -1,0 +1,10 @@
+{
+    "schemaVersion": 1,
+    "id": "msg-c42-2025-08-11T15:23:00-001",
+    "from": { "kind": "car", "carNumber": "42", "label": "Car 42 — Mouton" },
+    "to": [{ "kind": "control", "controlName": "net", "label": "Net Control" }],
+    "body": "Requesting permission to enter service. Approx 2 min out.",
+    "priority": "routine",
+    "clientCapturedAt": "2025-08-11T15:23:00Z",
+    "serverReceivedAt": null
+}

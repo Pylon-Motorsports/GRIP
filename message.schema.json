@@ -1,0 +1,114 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/message.schema.json",
+    "title": "GripMessage",
+    "description": "A text message exchanged between participants in a motorsport event — typically car-to-control (status reports, requests for service, requests for assistance), control-to-car (instructions, dispatch info), or control-to-everyone (broadcasts about delays, hazards, schedule changes). The protocol does not assume any specific topology: addresses are structured (kind + identifier) so producers can route hub-and-spoke through a net-control intermediary, peer-to-peer, or via any other means. App-specific data (delivery channel, retry count, voice annotation, etc.) lives under `extensions`.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "from", "to", "body"],
+    "definitions": {
+        "extensions": {
+            "type": "object",
+            "description": "App-specific namespaced data. Keys are app slugs (kebab-case recommended); values are objects owned by that app.",
+            "additionalProperties": { "type": "object" }
+        },
+        "address": {
+            "type": "object",
+            "description": "A structured participant address. `kind` selects the address type, and a kind-specific identifier (`carNumber` for cars, `controlName` for control stations) gives the actual target. `broadcast` addresses no one in particular — receivers should treat as 'everyone in scope'. `other` is the escape hatch for participants the protocol doesn't yet model (e.g. spectator radios). Note: `from` should never be `broadcast` — broadcasts originate from a specific sender.",
+            "additionalProperties": false,
+            "required": ["kind"],
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "enum": ["car", "control", "broadcast", "other"]
+                },
+                "carNumber": {
+                    "type": "string",
+                    "description": "Competition number when kind = 'car'. Mirrors car.number in car-status."
+                },
+                "controlName": {
+                    "type": "string",
+                    "description": "Control station identifier when kind = 'control'. Conventionally 'net' for net control; producers may also use 'race', 'medical', etc."
+                },
+                "label": {
+                    "type": "string",
+                    "description": "Optional human-readable label for displays (e.g. 'Car 42 — Mouton', 'Net Control'). Purely cosmetic; routing should use kind + identifier."
+                },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            },
+            "allOf": [
+                {
+                    "if": { "required": ["kind"], "properties": { "kind": { "const": "car" } } },
+                    "then": {
+                        "required": ["carNumber"],
+                        "properties": { "controlName": false }
+                    }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "control" } }
+                    },
+                    "then": {
+                        "required": ["controlName"],
+                        "properties": { "carNumber": false }
+                    }
+                },
+                {
+                    "if": {
+                        "required": ["kind"],
+                        "properties": { "kind": { "const": "broadcast" } }
+                    },
+                    "then": {
+                        "properties": { "carNumber": false, "controlName": false }
+                    }
+                }
+            ]
+        }
+    },
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "description": "Version of the message schema this document conforms to.",
+            "const": 1
+        },
+        "id": {
+            "type": "string",
+            "description": "Optional message identifier (UUID recommended). Set this if you want to support delivery acks, threading via replyTo, or deduplication."
+        },
+        "from": {
+            "$ref": "#/definitions/address",
+            "description": "Originating participant. Should never have kind = 'broadcast'."
+        },
+        "to": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/address" },
+            "description": "One or more recipients. A single broadcast address means 'everyone'; multiple addresses are a multi-recipient direct message."
+        },
+        "body": {
+            "type": "string",
+            "description": "UTF-8 message body. Length is not constrained by the schema; transport layers may impose their own limits."
+        },
+        "priority": {
+            "type": "string",
+            "enum": ["routine", "urgent", "emergency"],
+            "description": "Optional priority hint for routing and display. Producers should reserve 'emergency' for safety-critical traffic."
+        },
+        "replyTo": {
+            "type": "string",
+            "description": "Optional id of a message this is a reply to. Threads conversations across an exchange."
+        },
+        "clientCapturedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the message was authored on the producing device. Set by the producer."
+        },
+        "serverReceivedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "ISO 8601 UTC instant the message was received by the routing server. Set by the server on arrival; producers should leave this null."
+        },
+        "extensions": { "$ref": "#/definitions/extensions" }
+    }
+}

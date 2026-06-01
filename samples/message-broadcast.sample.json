@@ -1,0 +1,9 @@
+{
+    "schemaVersion": 1,
+    "id": "msg-net-2025-08-11T15:30:00-broadcast",
+    "from": { "kind": "control", "controlName": "net", "label": "Net Control" },
+    "to": [{ "kind": "broadcast", "label": "All cars" }],
+    "body": "All cars: SS3 delayed 20 min due to spectator incident. Service window extended accordingly.",
+    "priority": "urgent",
+    "clientCapturedAt": "2025-08-11T15:30:00Z"
+}
