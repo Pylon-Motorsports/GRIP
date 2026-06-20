@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Pylon-Motorsports/GRIP/schemas/device/beam_crossing.schema.json",
+  "title": "GRIP beam_crossing",
+  "description": "A single beam-break timing event reported by a trackside gate node (GRIP-Event-Beam). One car crossing one beam produces one of these. The base correlates events from start and finish gates by device and UTC time to compute section times.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "v",
+    "device",
+    "beam",
+    "seq",
+    "t_utc_us",
+    "t_mono_us",
+    "time_valid",
+    "fix",
+    "sats"
+  ],
+  "properties": {
+    "type": {
+      "const": "beam_crossing",
+      "description": "Message discriminator."
+    },
+    "v": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version of this message shape (GRIP_MSG_SCHEMA_VERSION in firmware)."
+    },
+    "device": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,30}$",
+      "description": "Node identity, e.g. 'start-gate-01' or 'finish-gate-01'. Lowercase letters, digits and hyphens; this charset is what lets the firmware embed it in JSON without escaping."
+    },
+    "beam": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Beam index on the node. 0 for a single-beam gate."
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Per-node sequence number, monotonically increasing from 1. Lets the base detect dropped reports over a lossy link."
+    },
+    "t_utc_us": {
+      "type": "integer",
+      "description": "Capture time in UTC, unix microseconds. Meaningful only when time_valid is true; otherwise a best-effort placeholder."
+    },
+    "t_mono_us": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Raw monotonic capture time (microseconds since node boot). Always present, even before GPS lock, so the base can reconcile late-disciplined events."
+    },
+    "time_valid": {
+      "type": "boolean",
+      "description": "True when t_utc_us is disciplined to GPS time (PPS + NMEA); false when the node had no fix yet and only the monotonic capture is trustworthy."
+    },
+    "fix": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "GNSS fix quality at capture, from NMEA GGA field 6 (0 none, 1 GPS, 2 DGPS, 4 RTK fixed, 5 RTK float)."
+    },
+    "sats": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Satellites used at capture, from NMEA GGA field 7."
+    }
+  }
+}
