@@ -1,0 +1,12 @@
+{
+  "type": "beam_crossing",
+  "v": 1,
+  "device": "start-gate-01",
+  "beam": 0,
+  "seq": 42,
+  "t_utc_us": 1700000001250000,
+  "t_mono_us": 6250000,
+  "time_valid": true,
+  "fix": 4,
+  "sats": 18
+}
