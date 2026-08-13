@@ -1,0 +1,17 @@
+GRIP — Generic Rally Information Protocol
+Copyright 2026 Pylon Motorsports
+
+This product includes schemas and software developed by the GRIP project
+(https://github.com/Pylon-Motorsports/GRIP).
+
+Licensed under the Apache License, Version 2.0. Section 4(d) of that license
+requires this notice to be carried forward into derivative works and their
+downstream distributions.
+
+The preset field-configs under presets/ are excluded from that requirement:
+they are dedicated to the public domain under CC0 1.0 (see presets/LICENSE),
+so documents that inline a preset carry no attribution obligation.
+
+Documents authored in the GRIP format — pace notes, stage geometry, event and
+car status records — are the property of their authors. They are not derivative
+works of these schemas, and this notice does not attach to them.
