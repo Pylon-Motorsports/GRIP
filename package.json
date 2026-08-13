@@ -4,6 +4,7 @@
     "private": true,
     "type": "module",
     "description": "GRIP — Generic Rally Information Protocol. JSON Schema definitions and validation harness.",
+    "license": "Apache-2.0",
     "scripts": {
         "test": "node scripts/validate.mjs",
         "render": "node scripts/render.mjs",
