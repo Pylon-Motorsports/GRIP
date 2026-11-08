@@ -11,12 +11,36 @@
         "from": { "lat": 35.15, "lon": -106.65 },
         "to": { "lat": 35.1501, "lon": -106.65 }
     },
+    "route": {
+        "points": [
+            { "lat": 35.1, "lon": -106.6 },
+            { "lat": 35.112, "lon": -106.615 },
+            { "lat": 35.131, "lon": -106.622 },
+            { "lat": 35.15, "lon": -106.65 }
+        ],
+        "lengthMeters": 6480,
+        "source": "osm"
+    },
+    "defaultSpeedLimits": [
+        {
+            "limitKilometresPerHour": 80,
+            "appliesDuring": ["recce"],
+            "description": "Recce limit from the supplementary regulations"
+        }
+    ],
     "speedLimits": [
         {
             "limitKilometresPerHour": 50,
             "start": { "lat": 35.08, "lon": -106.58 },
             "end": { "lat": 35.09, "lon": -106.59 },
             "description": "Through the village"
+        },
+        {
+            "limitKilometresPerHour": 30,
+            "start": { "lat": 35.112, "lon": -106.615 },
+            "end": { "lat": 35.118, "lon": -106.617 },
+            "appliesDuring": ["recce"],
+            "description": "Ranch gate"
         }
     ],
     "stagingAreas": [

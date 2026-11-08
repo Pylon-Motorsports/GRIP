@@ -1,0 +1,18 @@
+{
+    "description": "A defaultSpeedLimit must say how fast: limitKilometresPerHour is required.",
+    "instance": {
+        "schemaVersion": 1,
+        "event": {
+            "name": "E",
+            "date": "2025-08-11"
+        },
+        "stage": {
+            "name": "SS1"
+        },
+        "defaultSpeedLimits": [
+            {
+                "appliesDuring": ["recce"]
+            }
+        ]
+    }
+}

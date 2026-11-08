@@ -1,0 +1,21 @@
+{
+    "description": "A route is a polyline: `points` needs at least two geoPoints (minItems: 2). One point is a location, not a course.",
+    "instance": {
+        "schemaVersion": 1,
+        "event": {
+            "name": "E",
+            "date": "2025-08-11"
+        },
+        "stage": {
+            "name": "SS1"
+        },
+        "route": {
+            "points": [
+                {
+                    "lat": 35.1,
+                    "lon": -106.6
+                }
+            ]
+        }
+    }
+}

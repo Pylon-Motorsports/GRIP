@@ -26,6 +26,15 @@ A stage-geometry document describes a stage as an ordered list of segments. Each
 
 For surfaces with an overlay (sand, snow, water): `depthCentimeters = 0` means packed/dry underneath; a positive value is the depth of the loose material or water on top.
 
+### `event-details.schema.json`
+Per-stage organisational details, the geographic side of a stage: start and finish lines, time controls, staging areas, transit instructions, course markers and boundaries, and:
+
+- **`route`**: the course as an ordered polyline of WGS84 points from start to finish, following the road. Pace-note `indexOdo` distances are measured along it, so two devices reading the same notes read the same distance at the same corner.
+- **`speedLimits`**: limits between a `start` and an `end` point on the road, valid in either direction. **`defaultSpeedLimits`** cover the whole stage wherever no `speedLimits` entry applies. Both take an optional **`appliesDuring`** (`recce`, `transit`, `competition`; omitted = always), so a regulations' recce limit and a village's permanent limit can sit side by side. Where several limits apply, a section limit replaces the default and the lowest section limit wins.
+
+### Bundling one stage in one file
+A stage's documents can travel together as `{ "notes": <pace-note>, "geometry": <stage-geometry>, "eventDetails": <event-details> }`, every member optional except `notes`. Consumers that only understand pace notes read `notes` and ignore the rest.
+
 ## Presets
 
 ### `presets/classic-rally.field-config.json`
