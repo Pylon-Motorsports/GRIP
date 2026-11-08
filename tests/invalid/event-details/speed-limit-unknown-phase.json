@@ -1,0 +1,27 @@
+{
+    "description": "appliesDuring values come from a fixed vocabulary (recce, transit, competition). Producers can't invent new phases ad hoc.",
+    "instance": {
+        "schemaVersion": 1,
+        "event": {
+            "name": "E",
+            "date": "2025-08-11"
+        },
+        "stage": {
+            "name": "SS1"
+        },
+        "speedLimits": [
+            {
+                "limitKilometresPerHour": 50,
+                "start": {
+                    "lat": 35.08,
+                    "lon": -106.58
+                },
+                "end": {
+                    "lat": 35.09,
+                    "lon": -106.59
+                },
+                "appliesDuring": ["race-day"]
+            }
+        ]
+    }
+}

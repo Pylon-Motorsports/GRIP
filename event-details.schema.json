@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Pylon-Motorsports/GRIP/main/event-details.schema.json",
     "title": "GripEventDetails",
-    "description": "Per-stage organisational details for one stage of a motorsport event, transmitted from event control to in-car devices — start line, finish line, speed limits along the liaison/transit, staging areas (parc fermé, pre-stage holds), time controls, free-text transit instructions, discrete course markers (e.g. rallyX cones with pass-side), and continuous course boundaries (e.g. paved racetrack edges or cone-free rallyX boundary tape). Distinct from stage-geometry (the physical shape of the timed stage) and pace-note (driver shorthand). References its parent event by natural key.",
+    "description": "Per-stage organisational details for one stage of a motorsport event, transmitted from event control to in-car devices — start line, finish line, the course line (route), speed limits (for recce, the liaison/transit, or both), staging areas (parc fermé, pre-stage holds), time controls, free-text transit instructions, discrete course markers (e.g. rallyX cones with pass-side), and continuous course boundaries (e.g. paved racetrack edges or cone-free rallyX boundary tape). Distinct from stage-geometry (the physical shape of the timed stage) and pace-note (driver shorthand). References its parent event by natural key.",
     "type": "object",
     "additionalProperties": false,
     "required": ["schemaVersion", "event", "stage"],
@@ -35,15 +35,63 @@
                 "extensions": { "$ref": "#/definitions/extensions" }
             }
         },
+        "appliesDuring": {
+            "type": "array",
+            "description": "When a speed limit is in force: `recce` (crews driving the stage roads before the event to write pace notes), `transit` (the liaison/road sections between controls), `competition` (on the stage while it is run). Omitted: at all times.",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "enum": ["recce", "transit", "competition"] }
+        },
         "speedLimit": {
             "type": "object",
-            "description": "A speed limit applying from `start` to `end` along the route. Use multiple speedLimit entries for sections with different limits.",
+            "description": "A speed limit applying from `start` to `end` along the route, in either direction of travel. Use multiple speedLimit entries for sections with different limits. Where it is in force it replaces any defaultSpeedLimits entry for the same time; where several overlap, the lowest applies. `start` and `end` are points on the road, not a line across it: consumers without a route line typically treat a vehicle as inside from passing near one end until passing near the other.",
             "additionalProperties": false,
             "required": ["limitKilometresPerHour", "start", "end"],
             "properties": {
                 "limitKilometresPerHour": { "type": "integer", "minimum": 0 },
                 "start": { "$ref": "#/definitions/geoPoint" },
                 "end": { "$ref": "#/definitions/geoPoint" },
+                "appliesDuring": { "$ref": "#/definitions/appliesDuring" },
+                "description": {
+                    "type": ["string", "null"],
+                    "description": "Crew-facing label, e.g. 'Through the village'."
+                },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "defaultSpeedLimit": {
+            "type": "object",
+            "description": "A speed limit for the whole stage, wherever no speedLimit entry in force at the same time applies (e.g. the regulations' recce limit).",
+            "additionalProperties": false,
+            "required": ["limitKilometresPerHour"],
+            "properties": {
+                "limitKilometresPerHour": { "type": "integer", "minimum": 0 },
+                "appliesDuring": { "$ref": "#/definitions/appliesDuring" },
+                "description": { "type": ["string", "null"] },
+                "extensions": { "$ref": "#/definitions/extensions" }
+            }
+        },
+        "route": {
+            "type": "object",
+            "description": "The stage's course as an ordered polyline from the start control to the finish control, following the road. Distances along the stage (pace-note `indexOdo`) are measured along this line, so every party reads the same distance at the same corner.",
+            "additionalProperties": false,
+            "required": ["points"],
+            "properties": {
+                "points": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": { "$ref": "#/definitions/geoPoint" },
+                    "description": "Ordered polyline, start first."
+                },
+                "lengthMeters": {
+                    "type": ["number", "null"],
+                    "minimum": 0,
+                    "description": "Optional length of the polyline in metres, as the producer measured it. Informational: consumers should measure the points themselves."
+                },
+                "source": {
+                    "type": ["string", "null"],
+                    "description": "Optional free-text origin of the line, e.g. 'osm' (routed on OpenStreetMap roads), 'gpx' (an organiser's track), 'recorded' (driven)."
+                },
                 "description": { "type": ["string", "null"] },
                 "extensions": { "$ref": "#/definitions/extensions" }
             }
@@ -207,6 +255,12 @@
         },
         "startLine": { "$ref": "#/definitions/controlLine" },
         "finishLine": { "$ref": "#/definitions/controlLine" },
+        "route": { "$ref": "#/definitions/route" },
+        "defaultSpeedLimits": {
+            "type": "array",
+            "description": "Whole-stage limits, at most one per time of use (e.g. 80 km/h during recce).",
+            "items": { "$ref": "#/definitions/defaultSpeedLimit" }
+        },
         "speedLimits": {
             "type": "array",
             "items": { "$ref": "#/definitions/speedLimit" }
